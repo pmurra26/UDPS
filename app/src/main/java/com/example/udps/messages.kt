@@ -1,6 +1,5 @@
 package com.example.udps
 
-import android.net.Uri
 import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -24,7 +23,6 @@ class messages : AppCompatActivity() {
         val account:String = intent.getStringExtra("account").toString()
         println("parts recieved")
         val txtHeader = findViewById<TextView>(R.id.textHeader)
-        val dynamicText = TextView(this)
         when(type){
             "direct_t"->txtHeader.text = "$recipient's parents"
             "direct_p"->txtHeader.text = "$recipient's teachers"
@@ -34,8 +32,8 @@ class messages : AppCompatActivity() {
 
         val messageHistory = arrayOf(arrayOf("kerry", "         10:50, 24/03", "test message from \"kerry\"", "text"),
             arrayOf("annie_mum", "       10:52, 24/03", "test message from \"annie_mum\"", "text"),
-            arrayOf("kerry", "         10:50, 24/03", "test_picture1.jpeg", "image"),
-            arrayOf("annie_mum", "       10:52, 24/03", "test_picture2.jpg", "image"))
+            arrayOf("kerry", "         10:50, 24/03", R.drawable.test_pic_01, "image"),
+            arrayOf("annie_mum", "       10:52, 24/03", R.drawable.test_pic_02, "image"))
         val messageSV = findViewById<LinearLayout>(R.id.ll_messages_scrolling)
         for(i in messageHistory.indices){
             val messageCL = LinearLayout(this)
@@ -47,8 +45,8 @@ class messages : AppCompatActivity() {
             val message = TextView(this)
             val image = ImageView(this)
 
-            sender.text = messageHistory[i][0]
-            timeRCVD.text = messageHistory[i][1]
+            sender.text = messageHistory[i][0] as String
+            timeRCVD.text = messageHistory[i][1] as String
 
             sender.layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -86,18 +84,20 @@ class messages : AppCompatActivity() {
             messageCL.addView(messageH)
 
             if (messageHistory[i][3]=="text"){
-                message.text = messageHistory[i][2]
+                message.text = messageHistory[i][2] as String
                 message.layoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
                 )
                 messageCL.addView(message)
             } else{
-                if(messageHistory[i][2]=="test_picture1.jpeg"){
-                    image.setImageResource(R.drawable.test_picture1)
+                image.setImageResource(messageHistory[i][2] as Int)
+                /*if(messageHistory[i][2]=="test_picture1.jpeg"){
+                    val testarray = arrayOf(R.drawable.test_pic_01, "test")
+                    image.setImageResource(R.drawable.test_pic_01)
                 }else {
-                    image.setImageResource(R.drawable.test_picture2)
-                }
+                    image.setImageResource(R.drawable.test_pic_02)
+                }*/
                 image.layoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT

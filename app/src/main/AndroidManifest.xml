@@ -10,10 +10,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UDPS">
         <activity
+            android:name=".photoboardActivity"
+            android:exported="false"
+            android:label="@string/title_activity_photoboard"
+            android:theme="@style/Theme.UDPS.NoActionBar" />
+        <activity
             android:name=".messages"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
-
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".MainActivity2"
             android:exported="false" />

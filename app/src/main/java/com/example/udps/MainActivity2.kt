@@ -109,7 +109,7 @@ class MainActivity2 : AppCompatActivity() {
                 )
                 button_dynamic.text = classNames[i]
                 button_dynamic.setOnClickListener{
-                    val Intent = Intent(this, messages::class.java).apply {
+                    val Intent = Intent(this, photoboardActivity::class.java).apply {
                         putExtra("recipient", classNames[i])
                         putExtra("type", "class")
                         putExtra("account", account)
