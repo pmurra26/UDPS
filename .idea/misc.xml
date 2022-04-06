@@ -6,14 +6,21 @@
         <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/drawable/shape.xml" value="0.195" />
         <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/drawable/shapeRecieved.xml" value="0.14" />
         <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/drawable/shapeSent.xml" value="0.14" />
+        <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/activity_account_management.xml" value="0.358695652173913" />
         <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/activity_main2.xml" value="0.1661600810536981" />
         <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/activity_messages.xml" value="0.2" />
         <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/activity_photoboard.xml" value="0.358695652173913" />
         <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/activity_photoboard_comments.xml" value="0.358695652173913" />
         <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/content_scrolling.xml" value="0.358695652173913" />
+        <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/fragment_account_management.xml" value="0.358695652173913" />
+        <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/fragment_create_account.xml" value="0.14722222222222223" />
+        <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/fragment_dashboard.xml" value="0.358695652173913" />
+        <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/fragment_edit_account.xml" value="0.14722222222222223" />
         <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/fragment_header.xml" value="0.18697916666666667" />
+        <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/fragment_home.xml" value="0.358695652173913" />
         <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/fragment_messages_input.xml" value="0.33" />
+        <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/fragment_notifications.xml" value="0.358695652173913" />
         <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/fragment_scrolling_messages.xml" value="0.18697916666666667" />
         <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/main_fragment.xml" value="0.14" />
         <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/messages2_activity.xml" value="0.1" />

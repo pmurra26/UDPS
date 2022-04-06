@@ -54,10 +54,20 @@ class MainActivity2 : AppCompatActivity() {
          * then uses that information to create buttons for classes
          *
          */
-        val llHome = findViewById(R.id.ll_home) as LinearLayout
+        val homeHeader = findViewById<LinearLayout>(R.id.homeHeader)
+        val llHome = findViewById<LinearLayout>(R.id.ll_home)
         val nametag = TextView(this)
+        val accountButton = findViewById<Button>(R.id.homeHeaderButton)
         nametag.text = "signed in as: "+account+" \naccount type: "+accountType
-        llHome.addView(nametag)
+        homeHeader.addView(nametag)
+        accountButton.setOnClickListener{
+            val Intent = Intent(this, accountManagementActivity::class.java).apply {
+                putExtra("type", "class")
+                putExtra("account", account)
+            }
+            startActivity(Intent)
+        }
+
         if (accountType == "parent"){
             for (i in classes.indices){
                 for(j in classes[i].indices){
