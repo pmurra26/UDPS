@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.os.Message
 import android.provider.MediaStore
 import android.util.Log
+import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
@@ -18,10 +19,10 @@ import androidx.appcompat.app.AppCompatActivity
 class messages : AppCompatActivity() {
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
-    var messageHistory = mutableListOf<Array<out Any>>(arrayOf("kerry", "         10:50, 24/03", "test message from \"kerry\"", "text"),
-        arrayOf("annie_mum", "       10:52, 24/03", "test message from \"annie_mum\"", "text"),
-        arrayOf("kerry", "         10:50, 24/03", R.drawable.test_pic_01, "image"),
-        arrayOf("annie_mum", "       10:52, 24/03", R.drawable.test_pic_02, "image"))
+    var messageHistory = mutableListOf<Array<out Any>>(arrayOf("kerry", "10:50, 24/03", "test message from \"kerry\"", "text"),
+        arrayOf("annie_mum", "10:52, 24/03", "test message from \"annie_mum\"", "text"),
+        arrayOf("kerry", "10:50, 24/03", R.drawable.test_pic_01, "image"),
+        arrayOf("annie_mum", "10:52, 24/03", R.drawable.test_pic_02, "image"))
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,7 +93,9 @@ class messages : AppCompatActivity() {
         val messageSV = findViewById<LinearLayout>(R.id.ll_messages_scrolling)
         val messageCL = LinearLayout(this)
         val messageSpacer = LinearLayout(this)
-        val messageH= LinearLayout(this)
+        val messageHT= LinearLayout(this)
+        val messageHL= LinearLayout(this)
+        val messageHD= LinearLayout(this)
         val message4 = LinearLayout(this)
         val senderL = TextView(this)
         val timeRCVD = TextView(this)
@@ -112,10 +115,17 @@ class messages : AppCompatActivity() {
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
 
-        messageH.layoutParams = RelativeLayout.LayoutParams(
+        messageHT.layoutParams = RelativeLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
+
+        val hlp = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT)
+        hlp.weight = 50F
+        messageHL.layoutParams = hlp
+        messageHD.layoutParams = hlp
+        messageHD.gravity =Gravity.RIGHT
+
 
         messageSpacer.layoutParams = LinearLayout.LayoutParams(
             0,
@@ -133,9 +143,11 @@ class messages : AppCompatActivity() {
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
 
-        messageH.addView(senderL)
-        messageH.addView(timeRCVD)
-        messageCL.addView(messageH)
+        messageHL.addView(senderL)
+        messageHD.addView(timeRCVD)
+        messageHT.addView(messageHL)
+        messageHT.addView(messageHD)
+        messageCL.addView(messageHT)
 
         if (type=="text"){
             message.text = content.toString()
