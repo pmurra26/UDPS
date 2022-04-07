@@ -74,44 +74,4 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-    <!--
-    <fragment
-        android:id="@+id/headerFrag"
-        class="com.example.udps.HeaderFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:layout="@layout/fragment_header">
-    </fragment>
-
-    <fragment
-        android:id="@+id/scrollingMessageFrag"
-        class="com.example.udps.ScrollingFragmentMessages"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:layout="@layout/fragment_scrolling_messages"
-        ></fragment>
-    app:layout_constraintBottom_toTopOf="@+id/headerFrag"
-
-    <fragment
-        android:id="@+id/messageInput"
-        class="com.example.udps.messagesInput"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:layout="@layout/fragment_messages_input">
-    </fragment>
--->
 </androidx.constraintlayout.widget.ConstraintLayout>

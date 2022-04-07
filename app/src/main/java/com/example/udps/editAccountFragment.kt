@@ -1,15 +1,18 @@
 package com.example.udps
 
+import android.R
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
-import android.widget.TextClock
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import com.example.udps.databinding.FragmentEditAccountBinding
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -51,22 +54,37 @@ class editAccountFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         val userList = arrayOf("kerry", "annie_mum", "twin_mum", "test_teacher01", "test_teacher02", "test_parent01", "test_parent02")
-        val container = LinearLayout(activity)
-        val label = TextView(activity)
-        val editButton = Button(activity)
-        val deleteButton = Button(activity)
-
-        editButton.text = "edit"
-        deleteButton.text = "edit"
 
 
         for (i in userList.indices){
-            label.text = userList[i]
-            container.addView(label)
-            container.addView(editButton)
-            container.addView(deleteButton)
-            binding.llEditAccount.addView(container)
+            val containerTop = LinearLayout(activity)
+            val containerLabel = LinearLayout(activity)
+            val containerButtons = LinearLayout(activity)
+            val label = TextView(activity)
+            val editButton = Button(activity)
+            val deleteButton = Button(activity)
+            containerButtons.gravity = Gravity.RIGHT
+            val lp = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT)
+            lp.weight = 55f
+            val lp2 = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT)
+            lp2.weight = 45f
+            containerLabel.layoutParams = lp
+            containerButtons.layoutParams=lp2
+            label.textSize = 22F
 
+            editButton.text = "edit"
+            deleteButton.text = "delete"
+            label.text = userList[i]
+            if(label.parent== null) containerLabel.addView(label)
+            else Log.d("label","label has a parent, : "+label.parent)
+            if(editButton.parent== null) containerButtons.addView(editButton)
+            else Log.d("label","edit has a parent, : "+editButton.parent)
+            if(deleteButton.parent== null) containerButtons.addView(deleteButton)
+            else Log.d("label","delete has a parent, : "+deleteButton.parent)
+            if(containerLabel.parent== null) containerTop.addView(containerLabel)
+            if(containerButtons.parent== null) containerTop.addView(containerButtons)
+            if(containerTop.parent== null) binding.llEditAccount.addView(containerTop)
+            else Log.d("label","container has a parent, : "+containerTop.parent)
         }
 
     }

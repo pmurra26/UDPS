@@ -1,11 +1,9 @@
 package com.example.udps
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 
 class messages : AppCompatActivity() {
@@ -29,6 +27,7 @@ class messages : AppCompatActivity() {
             "class" ->txtHeader.text = "$recipient"
             else ->txtHeader.text = "something has gone terribly wrong. type = $type , recipient =  $recipient"
         }
+
 
         val messageHistory = arrayOf(arrayOf("kerry", "         10:50, 24/03", "test message from \"kerry\"", "text"),
             arrayOf("annie_mum", "       10:52, 24/03", "test message from \"annie_mum\"", "text"),
@@ -129,7 +128,11 @@ class messages : AppCompatActivity() {
 
 
         }
-        println("attempted to join room")
+        val imgCapture = findViewById<Button>(R.id.buttonPicture)
+        imgCapture.setOnClickListener{
+            val intent = Intent("android.media.action.IMAGE_CAPTURE")
+            startActivity(intent)
+        }
 
         //frag_home.addView(dynamicText)
 
