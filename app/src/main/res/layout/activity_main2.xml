@@ -14,13 +14,23 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
-        <LinearLayout
-            android:id="@+id/homeHeader"
+        <TextView
+            android:id="@+id/head_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/shape"
+            android:textColor="#ffffff"
+            android:text=" "
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:orientation="vertical" />
+            app:layout_constraintStart_toStartOf="parent"/>
+        <TextView
+            android:id="@+id/hp_textHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Header"
+            android:textSize="30dp"
+            app:layout_constraintStart_toEndOf="@id/head_image"
+            app:layout_constraintTop_toTopOf="parent" />
         <Button
             android:id="@+id/homeHeaderButton"
             android:layout_width="wrap_content"

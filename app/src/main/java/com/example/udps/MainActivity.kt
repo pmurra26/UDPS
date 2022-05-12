@@ -11,6 +11,11 @@ import android.widget.Toast
 
 import io.realm.log.RealmLog
 import io.realm.mongodb.Credentials
+import io.realm.mongodb.User
+import io.realm.mongodb.mongo.MongoClient
+import io.realm.mongodb.mongo.MongoCollection
+import io.realm.mongodb.mongo.MongoDatabase
+import org.bson.Document
 
 /**
  * log in screen code
@@ -23,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var username: EditText
     private lateinit var password: EditText
     private lateinit var loginButton: Button
+    private var user: User? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -37,6 +43,60 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        try {
+            user = UDPSApp.currentUser()
+        } catch (e: IllegalStateException) {
+            RealmLog.warn(e)
+        }
+        if (user != null) {
+            // if no user is currently logged in, start the login activity so the user can authenticate
+            val customUserData : Document? = user?.customData
+            val accountType = customUserData?.get("accountType")
+            val shortName = customUserData?.get("shortName")
+
+            //Log.v("EXAMPLE", "accountType: $test")
+            /*val mongoClient : MongoClient =
+                user?.getMongoClient("mongodb-atlas")!! // service for MongoDB Atlas cluster containing custom user data
+            val mongoDatabase : MongoDatabase =
+                mongoClient.getDatabase("YarmGwanga")!!
+            val mongoCollection : MongoCollection<Document> =
+                mongoDatabase.getCollection("YarmGwangaCustomData")!!
+            mongoCollection.insertOne(Document("ownerId", user!!.id).append("accountType", "teacher").append("_partition", "test"))
+                .getAsync { result ->
+                    if (result.isSuccess) {
+                        Log.v("EXAMPLE", "Inserted custom user data document. _id of inserted document: ${result.get().insertedId}")
+                    } else {
+                        Log.e("EXAMPLE", "Unable to insert custom user data. Error: ${result.error}")
+                    }
+                }*/
+
+            if(accountType=="teacher") {
+                val intent = Intent(this, MainActivity2::class.java).apply {
+                    putExtra("username", shortName.toString())
+                    putExtra("account", "teacher")
+                }
+
+                Toast.makeText(this@MainActivity, "Welcome $username!", Toast.LENGTH_SHORT)
+                    .show()
+                startActivity(intent)
+            }else {
+                val Intent = Intent(this, photoboardActivity::class.java).apply {
+                    putExtra("username", shortName.toString())
+                    putExtra("account", "parent")
+                    putExtra("recipient", "Red Wombats")
+                }
+
+                Toast.makeText(this@MainActivity, "Welcome $username!", Toast.LENGTH_SHORT)
+                    .show()
+                startActivity(Intent)
+
+            }
+        }
+
+    }
+
     override fun onBackPressed() {
         // Disable going back to the MainActivity
         moveTaskToBack(true)
@@ -48,7 +108,16 @@ class MainActivity : AppCompatActivity() {
         var editor = sharedPreference.edit()
         editor.putString("partition",partition)
         editor.commit()
-        finish()
+        val Intent = Intent(this, photoboardActivity::class.java).apply {
+            putExtra("username", username.text)
+            putExtra("account", "teacher")
+            putExtra("recipient", "teacher" )
+        }
+
+        Toast.makeText(this@MainActivity, "Welcome $username!", Toast.LENGTH_SHORT)
+            .show()
+        startActivity(Intent)
+        //finish()
     }
     private fun onLoginFailed(errorMsg: String) {
         Log.v(TAG(), errorMsg)
@@ -83,6 +152,7 @@ class MainActivity : AppCompatActivity() {
                 RealmLog.error(it.error.toString())
                 onLoginFailed(it.error.message ?: "An error occurred.")
             } else {
+
                 onLoginSuccess("test")
             }
         }

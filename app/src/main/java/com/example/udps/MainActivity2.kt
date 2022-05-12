@@ -54,12 +54,10 @@ class MainActivity2 : AppCompatActivity() {
          * then uses that information to create buttons for classes
          *
          */
-        val homeHeader = findViewById<LinearLayout>(R.id.homeHeader)
         val llHome = findViewById<LinearLayout>(R.id.ll_home)
-        val nametag = TextView(this)
+        val nametag = findViewById<TextView>(R.id.hp_textHeader)
         val accountButton = findViewById<Button>(R.id.homeHeaderButton)
-        nametag.text = "signed in as: "+account+" \naccount type: "+accountType
-        homeHeader.addView(nametag)
+        nametag.text = account
         accountButton.setOnClickListener{
             val Intent = Intent(this, accountManagementActivity::class.java).apply {
                 putExtra("type", "class")
