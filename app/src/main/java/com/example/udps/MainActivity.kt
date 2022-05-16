@@ -15,6 +15,7 @@ import io.realm.mongodb.User
 import io.realm.mongodb.mongo.MongoClient
 import io.realm.mongodb.mongo.MongoCollection
 import io.realm.mongodb.mongo.MongoDatabase
+import io.realm.Realm
 import org.bson.Document
 
 /**
@@ -108,7 +109,32 @@ class MainActivity : AppCompatActivity() {
         var editor = sharedPreference.edit()
         editor.putString("partition",partition)
         editor.commit()
-        val Intent = Intent(this, photoboardActivity::class.java).apply {
+        user = UDPSApp.currentUser()
+        val customUserData : Document? = user?.customData
+        val accountType = customUserData?.get("accountType")
+        val shortName = customUserData?.get("shortName")
+        if(accountType=="teacher") {
+            val intent = Intent(this, MainActivity2::class.java).apply {
+                putExtra("username", shortName.toString())
+                putExtra("account", accountType.toString())
+            }
+
+            Toast.makeText(this@MainActivity, "Welcome $username!", Toast.LENGTH_SHORT)
+                .show()
+            startActivity(intent)
+        }else {
+            val Intent = Intent(this, photoboardActivity::class.java).apply {
+                putExtra("username", shortName.toString())
+                putExtra("account", accountType.toString())
+                putExtra("recipient", "Red Wombats")
+            }
+
+            Toast.makeText(this@MainActivity, "Welcome $username!", Toast.LENGTH_SHORT)
+                .show()
+            startActivity(Intent)
+
+        }
+        /*val Intent = Intent(this, photoboardActivity::class.java).apply {
             putExtra("username", username.text)
             putExtra("account", "teacher")
             putExtra("recipient", "teacher" )
@@ -116,7 +142,7 @@ class MainActivity : AppCompatActivity() {
 
         Toast.makeText(this@MainActivity, "Welcome $username!", Toast.LENGTH_SHORT)
             .show()
-        startActivity(Intent)
+        startActivity(Intent)*/
         //finish()
     }
     private fun onLoginFailed(errorMsg: String) {

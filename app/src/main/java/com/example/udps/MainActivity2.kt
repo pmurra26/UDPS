@@ -3,11 +3,21 @@ package com.example.udps
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+
+import io.realm.log.RealmLog
+import io.realm.mongodb.Credentials
+import io.realm.mongodb.User
+import io.realm.mongodb.mongo.MongoClient
+import io.realm.mongodb.mongo.MongoCollection
+import io.realm.mongodb.mongo.MongoDatabase
+import io.realm.Realm
+import org.bson.Document
 
 /**
  * code controlling the room selection screen, dynamically creates rooms based on who logs in,
@@ -18,11 +28,16 @@ import android.widget.Toast
 
 
 class MainActivity2 : AppCompatActivity() {
+    private lateinit var realm: Realm
+    private var user: User? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
     }
-
+    override fun onBackPressed() {
+        // Disable going back to the MainActivity
+        moveTaskToBack(true)
+    }
     override fun onResume() {
         super.onResume()
         setContentView(R.layout.activity_main2)
@@ -30,6 +45,23 @@ class MainActivity2 : AppCompatActivity() {
         val account:String = intent.getStringExtra("username").toString()
         val accountType=intent.getStringExtra("account").toString()
 
+        val headImg = findViewById<TextView>(R.id.head_image)
+        user = UDPSApp.currentUser()
+        realm = Realm.getDefaultInstance()
+        headImg.setOnClickListener(){
+            user?.logOutAsync {
+                if (it.isSuccess) {
+                    // always close the realm when finished interacting to free up resources
+                    realm.close()
+                    user = null
+                    Log.v(TAG(), "user logged out")
+                    startActivity(Intent(this, MainActivity::class.java))
+                } else {
+                    RealmLog.error(it.error.toString())
+                    Log.e(TAG(), "log out failed! Error: ${it.error}")
+                }
+            }
+        }
 
         //class arrays
         val classes = arrayOf(arrayOf(arrayOf("annie","annie_mum"), arrayOf("betty","bettys_mum"),
