@@ -111,6 +111,7 @@ class MainActivity : AppCompatActivity() {
         editor.commit()
         user = UDPSApp.currentUser()
         val customUserData : Document? = user?.customData
+        Log.v("EXAMPLE", "found custom user data document. _id of inserted document: ${customUserData}")
         val accountType = customUserData?.get("accountType")
         val shortName = customUserData?.get("shortName")
         if(accountType=="teacher") {
@@ -119,20 +120,61 @@ class MainActivity : AppCompatActivity() {
                 putExtra("account", accountType.toString())
             }
 
-            Toast.makeText(this@MainActivity, "Welcome $username!", Toast.LENGTH_SHORT)
+            Toast.makeText(this@MainActivity, "Welcome $shortName!", Toast.LENGTH_SHORT)
                 .show()
             startActivity(intent)
-        }else {
+        }else if(accountType=="parent") {
             val Intent = Intent(this, photoboardActivity::class.java).apply {
                 putExtra("username", shortName.toString())
                 putExtra("account", accountType.toString())
                 putExtra("recipient", "Red Wombats")
             }
 
-            Toast.makeText(this@MainActivity, "Welcome $username!", Toast.LENGTH_SHORT)
+            Toast.makeText(this@MainActivity, "Welcome $shortName!", Toast.LENGTH_SHORT)
                 .show()
             startActivity(Intent)
 
+        } else{
+            val queryFilter = Document("flag", username.text.toString())
+            val mongoClient : MongoClient = user?.getMongoClient("mongodb-atlas")!! // service for MongoDB Atlas cluster containing custom user data
+            val mongoDatabase : MongoDatabase = mongoClient.getDatabase("YarmGwanga")!!
+            val mongoCollection : MongoCollection<Document> = mongoDatabase.getCollection("YarmGwangaCustomData")!!
+
+            mongoCollection.findOne(queryFilter)
+                .getAsync { task ->
+                    if (task.isSuccess) {
+                        val result = task.get()
+                        mongoCollection.insertOne(Document("ownerId", user!!.id).append("_partition", "test")
+                            .append("shortName", result["shortName"]).append("accountType", result["accountType"])
+                            .append("children", result["children"])).getAsync { result ->
+                            if (result.isSuccess) {
+                                Log.v("EXAMPLE", "Inserted custom user data document. _id of inserted document: ${result.get().insertedId}")
+                            } else {
+                                Log.e("EXAMPLE", "Unable to insert custom user data. Error: ${result.error}")
+                            }
+                        }
+
+                        result.clear()
+                        Log.v("EXAMPLE", "successfully found a document: $result")
+                        Log.v("EXAMPLE", "successfully found a document: ${username.text.toString()}")
+                        var realm = Realm.getDefaultInstance()
+                        user?.logOutAsync {
+                            if (it.isSuccess) {
+                                // always close the realm when finished interacting to free up resources
+                                realm.close()
+                                user = null
+                                Log.v(TAG(), "user logged out")
+                                //startActivity(Intent(this, MainActivity::class.java))
+                            } else {
+                                RealmLog.error(it.error.toString())
+                                Log.e(TAG(), "log out failed! Error: ${it.error}")
+                            }
+                        }
+                        login()
+                    } else {
+                        Log.e("EXAMPLE", "failed to find document with: ${task.error}")
+                    }
+                }
         }
         /*val Intent = Intent(this, photoboardActivity::class.java).apply {
             putExtra("username", username.text)
@@ -173,7 +215,7 @@ class MainActivity : AppCompatActivity() {
         val creds = Credentials.emailPassword(username, password)
         UDPSApp.loginAsync(creds) {
             // re-enable the buttons after
-            loginButton.isEnabled = true
+            //loginButton.isEnabled = true
             if (!it.isSuccess) {
                 RealmLog.error(it.error.toString())
                 onLoginFailed(it.error.message ?: "An error occurred.")

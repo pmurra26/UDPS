@@ -12,7 +12,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.udps.databinding.FragmentCreateAccountBinding
 
-
 import io.realm.log.RealmLog
 import io.realm.mongodb.Credentials
 import io.realm.mongodb.App
@@ -21,7 +20,7 @@ import io.realm.mongodb.mongo.MongoClient
 import io.realm.mongodb.mongo.MongoCollection
 import io.realm.mongodb.mongo.MongoDatabase
 import io.realm.Realm
-import io.realm.mongodb.auth.*
+import io.realm.mongodb.auth.EmailPasswordAuth
 import org.bson.Document
 
 // TODO: Rename parameter arguments, choose names that match
@@ -82,29 +81,28 @@ class createAccountFragment : Fragment() {
         val username = binding.parentEmail.text.toString()
         val password = binding.parentPassword.text.toString()
         val shortName = binding.parentShortName.text.toString()
-        UDPSApp.auth.emailPassword.registerEmail(username, password) {
+        UDPSApp.emailPassword.registerUserAsync(username, password) {
             // re-enable the buttons after user registration completes
             binding.saveBtn.isEnabled = true
             binding.clearBtn.isEnabled = true
             if (!it.isSuccess) {
-                onLoginFailed("Could not register user.")
+                onCreateFailed("Could not register user.")
                 Log.v(TAG(), "Error: ${it.error}")
             } else {
                 Log.v(TAG(), "Successfully registered user.")
                 // when the account has been created successfully, log in to the account
-                login(false)
+                //login(false)
             }
         }
         var user = UDPSApp.currentUser()
         val mongoClient : MongoClient = user?.getMongoClient("mongodb-atlas")!! // service for MongoDB Atlas cluster containing custom user data
         val mongoDatabase : MongoDatabase = mongoClient.getDatabase("YarmGwanga")!!
         val mongoCollection : MongoCollection<Document> = mongoDatabase.getCollection("YarmGwangaCustomData")!!
-        val newUserID= mongoDatabase.getUser(username)
-        var newUserDoc = Document("ownerId", newUserID).append("shortName", shortName).append("_partition", "test")
+        var newUserDoc = Document("ownerId", "tbd").append("flag", username).append("shortName", shortName).append("_partition", "test")
         if (accountType==0){
             newUserDoc.append("accountType", "teacher")
         }else{
-            newUserDoc.append("accountType", "parent").append("children", arrayOf(binding.childname.text.toString()))
+            newUserDoc.append("accountType", "parent").append("children", binding.childname.text.toString())
         }
 
         mongoCollection.insertOne(newUserDoc)
