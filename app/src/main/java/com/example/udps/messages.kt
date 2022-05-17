@@ -11,13 +11,30 @@ import android.util.Log
 import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.*
+import androidx.recyclerview.widget.RecyclerView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import io.realm.Realm
+import io.realm.kotlin.where
+import io.realm.mongodb.User
+import io.realm.mongodb.mongo.MongoClient
+import io.realm.mongodb.mongo.MongoCollection
+import io.realm.mongodb.mongo.MongoDatabase
+import org.bson.Document
+
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 
 class messages : AppCompatActivity() {
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+    private var user: User? = null
+    private lateinit var realm: Realm
+    private lateinit var recyclerView: RecyclerView
+
 
     var messageHistory = mutableListOf<Array<out Any>>(arrayOf("kerry", "10:50, 24/03", "test message from \"kerry\"", "text"),
         arrayOf("annie_mum", "10:52, 24/03", "test message from \"annie_mum\"", "text"),
@@ -41,10 +58,9 @@ class messages : AppCompatActivity() {
         super.onResume()
         setContentView(R.layout.activity_messages)
 
-        val recipient:String = intent.getStringExtra("recipient").toString()
+        val recipient:String = intent.getStringExtra("recipient").toString()//recipient shortname
         val type:String =intent.getStringExtra("type").toString()
-        val account:String = intent.getStringExtra("account").toString()
-        println("parts recieved")
+        val account:String = intent.getStringExtra("account").toString()//recipient id
         val txtHeader = findViewById<TextView>(R.id.textHeader)
         when(type){
             "direct_t"->txtHeader.text = "$recipient's parents"
@@ -58,11 +74,30 @@ class messages : AppCompatActivity() {
         for(i in messageHistory.indices){
             buildMessage(messageHistory[i][0] as String, messageHistory[i][1]  as String,messageHistory[i][3]  as String,messageHistory[i][2] )
         }
+        user = UDPSApp.currentUser()
+        realm = Realm.getDefaultInstance()
+        val mongoClient : MongoClient = user?.getMongoClient("mongodb-atlas")!! // service for MongoDB Atlas cluster containing custom user data
+        val mongoDatabase : MongoDatabase = mongoClient.getDatabase("YarmGwanga")!!
+        val mongoCollection : MongoCollection<Document> = mongoDatabase.getCollection("Messages")!!
+
         val sendButton = findViewById<Button>(R.id.buttonSend)
         val inputTA = findViewById<EditText>(R.id.TAmessageInput)
         sendButton.setOnClickListener{
+            val current = LocalDateTime.now()
+            val formatter = DateTimeFormatter.ofPattern("dd-MM-yy HH:mm")
+            val formatted = current.format(formatter)
+            mongoCollection.insertOne(Document("sender", user?.id).append("conversation", account)
+                .append("time", formatted.toString()).append("message", inputTA.text.toString()).append("_partition", "test")
+            )
+                .getAsync { result ->
+                    if (result.isSuccess) {
+                        Log.v("EXAMPLE", "Inserted message document. _id of inserted document: ${result.get().insertedId}")
+                    } else {
+                        Log.e("EXAMPLE", "Unable to insert message. Error: ${result.error}")
+                    }
+                }
             buildMessage(content=inputTA.text)
-            saveMessage(inputTA.text,"text")
+            //saveMessage(inputTA.text,"text")
             inputTA.text.clear()
         }
         val imgCapture = findViewById<Button>(R.id.buttonPicture)
@@ -80,7 +115,7 @@ class messages : AppCompatActivity() {
     private fun handleCameraImage(intent: Intent?) {
         Log.d("PT", "photo taken")
         val photo = intent?.extras?.get("data") as Bitmap
-        saveMessage(type="BMP", input = photo)
+        //saveMessage(type="BMP", input = photo)
 
     }
 
@@ -186,10 +221,6 @@ class messages : AppCompatActivity() {
 
         }
 
-
-
-
-
         if(intent.getStringExtra("account").toString()==sender){
             messageCL.setBackgroundResource(R.drawable.shape_sent)
             val lp = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -206,10 +237,17 @@ class messages : AppCompatActivity() {
             messageSV.addView(messageCL)
         }
     }
-    fun saveMessage(input:Any, type:String){
-        val account = intent.getStringExtra("account").toString()
-        val dateTime = "now"
 
-        messageHistory.add(arrayOf(account, dateTime, input, type))
+
+    private fun setUpRecyclerView(realm: Realm) {
+        // a recyclerview requires an adapter, which feeds it items to display.
+        // Realm provides RealmRecyclerViewAdapter, which you can extend to customize for your application
+        // pass the adapter a collection of Tasks from the realm
+        // we sort this collection so that the displayed order of Tasks remains stable across updates
+        adapter = InventoryItemAdapter(realm.where<InventoryItem>().sort("_id").findAll())
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = adapter
+        recyclerView.setHasFixedSize(true)
+        recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
     }
 }
