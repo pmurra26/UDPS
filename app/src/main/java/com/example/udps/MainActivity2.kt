@@ -10,6 +10,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 
+
+
 import io.realm.log.RealmLog
 import io.realm.mongodb.Credentials
 import io.realm.mongodb.User
@@ -18,6 +20,7 @@ import io.realm.mongodb.mongo.MongoCollection
 import io.realm.mongodb.mongo.MongoDatabase
 import io.realm.Realm
 import org.bson.Document
+
 
 /**
  * code controlling the room selection screen, dynamically creates rooms based on who logs in,
@@ -30,6 +33,7 @@ import org.bson.Document
 class MainActivity2 : AppCompatActivity() {
     private lateinit var realm: Realm
     private var user: User? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
@@ -80,14 +84,91 @@ class MainActivity2 : AppCompatActivity() {
             arrayOf("xanthe", "xanthe_mum"), arrayOf("yvette", "yvette_par"), arrayOf("zed", "zed_par")
         ))
 
+        val llHome = findViewById<LinearLayout>(R.id.ll_home)
+
         val classNames = arrayOf("red wombats", "yellow porcupines", "gold giraffes", "blue beetles")
+        var activeUserId = mutableListOf<String>()
+        var activeUserSname = mutableListOf<String>()
+
+        val queryFilter = Document("active", "1")
+        val mongoClient : MongoClient = user?.getMongoClient("mongodb-atlas")!! // service for MongoDB Atlas cluster containing custom user data
+        val mongoDatabase : MongoDatabase = mongoClient.getDatabase("YarmGwanga")!!
+        val mongoCollection : MongoCollection<Document> = mongoDatabase.getCollection("YarmGwangaCustomData")!!
+
+        var findTask = mongoCollection.find(queryFilter).iterator()
+        findTask.getAsync { task ->
+            if (task.isSuccess) {
+                val results = task.get()
+                Log.v("EXAMPLE", "successfully found all active users")
+                while (results.hasNext()) {
+                    var current = results.next()
+                    Log.v("EXAMPLE", current.toString())
+                    if(current["accountType"] == "parent") {
+                        activeUserId.add(current["ownerId"].toString())
+                        activeUserSname.add(current["shortName"].toString())
+                    }
+                }
+                if( accountType == "teacher"){
+                    Log.v("EXAMPLE", "list of names: ${activeUserSname.toString()}")
+
+                    for (i in classes.indices) {
+                        val button_dynamic = Button(this)
+                        // setting layout_width and layout_height using layout parameters
+                        button_dynamic.layoutParams = LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT
+                        )
+                        button_dynamic.text = classNames[i]
+                        button_dynamic.setOnClickListener{
+                            val Intent = Intent(this, photoboardActivity::class.java).apply {
+                                putExtra("recipient", classNames[i])
+                                putExtra("type", "class")
+                                putExtra("account", account)
+                            }
+                            startActivity(Intent)
+                        }
+                        llHome.addView(button_dynamic)
+                    }
+                    for (item in activeUserSname) {
+                        Log.v("EXAMPLE", activeUserSname.toString())
+
+                        val button_dynamic = Button(this)
+                        // setting layout_width and layout_height using layout parameters
+                        button_dynamic.layoutParams = LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT
+                        )
+                        var index = activeUserSname.indexOf(item)
+                        button_dynamic.text = item
+                        button_dynamic.setOnClickListener {
+                            val Intent = Intent(this, messages::class.java).apply {
+                                putExtra("recipient", item)
+                                putExtra("type", "direct_t")
+                                putExtra("account", activeUserId.elementAt(index))
+                            }
+                            startActivity(Intent)
+                        }
+                        llHome.addView(button_dynamic)
+
+                    }
+                }
+            } else {
+                Log.e("EXAMPLE", "failed to find documents with: ${task.error}")
+
+            }
+        }
+
+        Log.v("EXAMPLE", "list of names: ${activeUserSname.toString()}")
+        Log.v("EXAMPLE", "accountType: $accountType")
 
         /**creates a dynamic text view that states who you are logged in as,
          * then uses that information to create buttons for classes
          *
          */
-        val llHome = findViewById<LinearLayout>(R.id.ll_home)
         val nametag = findViewById<TextView>(R.id.hp_textHeader)
+        Log.v("EXAMPLE", "list of names: ${activeUserSname.toString()}")
+        Log.v("EXAMPLE", "accountType: $accountType")
+
         val accountButton = findViewById<Button>(R.id.homeHeaderButton)
         nametag.text = account
         accountButton.setOnClickListener{
@@ -136,46 +217,6 @@ class MainActivity2 : AppCompatActivity() {
                         }
                         llHome.addView(button_dynamic2)
                     }
-                }
-            }
-        }
-        if( accountType == "teacher"){
-            for (i in classes.indices) {
-                val button_dynamic = Button(this)
-                // setting layout_width and layout_height using layout parameters
-                button_dynamic.layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-                )
-                button_dynamic.text = classNames[i]
-                button_dynamic.setOnClickListener{
-                    val Intent = Intent(this, photoboardActivity::class.java).apply {
-                        putExtra("recipient", classNames[i])
-                        putExtra("type", "class")
-                        putExtra("account", account)
-                    }
-                    startActivity(Intent)
-                }
-                llHome.addView(button_dynamic)
-            }
-            for (i in classes.indices){
-                for(j in classes[i].indices){
-                    val button_dynamic = Button(this)
-                    // setting layout_width and layout_height using layout parameters
-                    button_dynamic.layoutParams = LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT
-                    )
-                    button_dynamic.text = classes[i][j][0]+"'s parents"
-                    button_dynamic.setOnClickListener {
-                        val Intent = Intent(this, messages::class.java).apply {
-                            putExtra("recipient", classes[i][j][0])
-                            putExtra("type", "direct_t")
-                            putExtra("account", account)
-                        }
-                        startActivity(Intent)
-                    }
-                    llHome.addView(button_dynamic)
                 }
             }
         }

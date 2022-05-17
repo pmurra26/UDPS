@@ -146,7 +146,7 @@ class MainActivity : AppCompatActivity() {
                         val result = task.get()
                         mongoCollection.insertOne(Document("ownerId", user!!.id).append("_partition", "test")
                             .append("shortName", result["shortName"]).append("accountType", result["accountType"])
-                            .append("children", result["children"])).getAsync { result ->
+                            .append("children", result["children"]).append("active", "1")).getAsync { result ->
                             if (result.isSuccess) {
                                 Log.v("EXAMPLE", "Inserted custom user data document. _id of inserted document: ${result.get().insertedId}")
                             } else {
