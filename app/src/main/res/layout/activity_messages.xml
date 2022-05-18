@@ -26,15 +26,7 @@
             android:textSize="30dp"
             android:id="@+id/textHeader"/>
     </LinearLayout>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/messagesRV"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@null"
-        app:layout_constraintTop_toBottomOf="@id/ll_header"
-        app:layout_constraintBottom_toTopOf="@id/ll_input"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+
     <!--<ScrollView
         android:id="@+id/sv_messages_scrolling"
         android:layout_width="match_parent"
@@ -49,6 +41,16 @@
             android:layout_height="match_parent"
             android:orientation="vertical"/>
     </ScrollView>-->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/messagesRV"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@null"
+        app:layout_constraintTop_toBottomOf="@id/ll_header"
+        app:layout_constraintBottom_toTopOf="@id/ll_input"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_height="wrap_content"

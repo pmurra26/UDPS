@@ -219,6 +219,7 @@ class MainActivity : AppCompatActivity() {
             if (!it.isSuccess) {
                 RealmLog.error(it.error.toString())
                 onLoginFailed(it.error.message ?: "An error occurred.")
+                loginButton.isEnabled = true
             } else {
 
                 onLoginSuccess("test")

@@ -3,17 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.177" />
-        <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.177" />
-        <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.177" />
-        <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/drawable/shape.xml" value="0.177" />
-        <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/drawable/shape_recieved.xml" value="0.177" />
-        <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/drawable/shape_sent.xml" value="0.177" />
-        <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/layout/activity_main2.xml" value="0.1" />
-        <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/layout/activity_messages.xml" value="0.1" />
-        <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/layout/activity_photoboard.xml" value="0.225" />
-        <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/layout/activity_photoboard_comments.xml" value="0.225" />
-        <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/layout/fragment_create_account.xml" value="0.25" />
+        <entry key="..\:/Users/denise/StudioProjects/UDPS/app/src/main/res/drawable/shape_sent.xml" value="0.332" />
+        <entry key="..\:/Users/denise/StudioProjects/UDPS/app/src/main/res/layout/activity_main2.xml" value="0.13269927536231885" />
+        <entry key="..\:/Users/denise/StudioProjects/UDPS/app/src/main/res/layout/activity_messages.xml" value="0.33" />
+        <entry key="..\:/Users/denise/StudioProjects/UDPS/app/src/main/res/layout/activity_photoboard.xml" value="0.13269927536231885" />
+        <entry key="..\:/Users/denise/StudioProjects/UDPS/app/src/main/res/layout/message_cardview.xml" value="1.5230263157894737" />
         <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/drawable/shape.xml" value="0.195" />
         <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/drawable/shapeRecieved.xml" value="0.14" />
         <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/drawable/shapeSent.xml" value="0.14" />

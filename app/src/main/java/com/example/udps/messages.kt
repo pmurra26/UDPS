@@ -83,11 +83,11 @@ class messages : AppCompatActivity() {
         val sendButton = findViewById<Button>(R.id.buttonSend)
         val inputTA = findViewById<EditText>(R.id.TAmessageInput)
         sendButton.setOnClickListener{
-            val current = LocalDateTime.now()
+            val timeRaw = LocalDateTime.now()
             val formatter = DateTimeFormatter.ofPattern("dd-MM-yy HH:mm")
-            val formatted = current.format(formatter)
+            val formatted = timeRaw.format(formatter)
             mongoCollection.insertOne(Document("sender", user?.id).append("conversation", account)
-                .append("time", formatted.toString()).append("message", inputTA.text.toString()).append("_partition", "test")
+                .append("time", formatted.toString()).append("timeRaw", timeRaw.toString()).append("message", inputTA.text.toString()).append("_partition", "test")
             )
                 .getAsync { result ->
                     if (result.isSuccess) {

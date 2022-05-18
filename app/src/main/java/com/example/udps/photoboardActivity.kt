@@ -31,8 +31,8 @@ class photoboardActivity : AppCompatActivity() {
     override fun onBackPressed() {
         // Disable going back to the MainActivity
         val accountT = intent.getStringExtra("account")
-        if (accountT == "parent")
-        moveTaskToBack(true)
+        if (accountT == "parent"){moveTaskToBack(true)}
+        else super.onBackPressed()
     }
 
     override fun onResume() {
