@@ -1,13 +1,14 @@
 package com.example.udps
 
+
 import android.app.Application
-
-
 import io.realm.Realm
+import io.realm.RealmConfiguration
 import io.realm.log.LogLevel
 import io.realm.log.RealmLog
 import io.realm.mongodb.App
 import io.realm.mongodb.AppConfiguration
+
 
 lateinit var UDPSApp: App
 
@@ -23,6 +24,11 @@ class UDPS : Application() {
     override fun onCreate() {
         super.onCreate()
         Realm.init(this)
+        val test = RealmConfiguration.Builder().name("default2")
+            .schemaVersion(1)
+            .deleteRealmIfMigrationNeeded()
+            .build()
+
         UDPSApp = App(AppConfiguration.Builder(BuildConfig.MONGODB_REALM_APP_ID)
             .baseUrl(BuildConfig.MONGODB_REALM_URL)
             .appName(BuildConfig.VERSION_NAME)

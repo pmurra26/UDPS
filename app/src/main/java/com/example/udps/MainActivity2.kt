@@ -19,6 +19,7 @@ import io.realm.mongodb.mongo.MongoClient
 import io.realm.mongodb.mongo.MongoCollection
 import io.realm.mongodb.mongo.MongoDatabase
 import io.realm.Realm
+import io.realm.RealmConfiguration
 import org.bson.Document
 
 
@@ -51,6 +52,12 @@ class MainActivity2 : AppCompatActivity() {
 
         val headImg = findViewById<TextView>(R.id.head_image)
         user = UDPSApp.currentUser()
+        val test = RealmConfiguration.Builder().name("default3")
+            .schemaVersion(2)
+            .deleteRealmIfMigrationNeeded()
+            .build()
+
+        Realm.setDefaultConfiguration(test)
         realm = Realm.getDefaultInstance()
         headImg.setOnClickListener(){
             user?.logOutAsync {

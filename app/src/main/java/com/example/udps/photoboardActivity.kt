@@ -18,6 +18,7 @@ import io.realm.mongodb.mongo.MongoClient
 import io.realm.mongodb.mongo.MongoCollection
 import io.realm.mongodb.mongo.MongoDatabase
 import io.realm.Realm
+import io.realm.RealmConfiguration
 import org.bson.Document
 
 class photoboardActivity : AppCompatActivity() {
@@ -44,6 +45,12 @@ class photoboardActivity : AppCompatActivity() {
         val actionButton = findViewById<Button>(R.id.head_actionButton)
         val headImg = findViewById<TextView>(R.id.head_image)
         user = UDPSApp.currentUser()
+        val test = RealmConfiguration.Builder().name("default3")
+            .schemaVersion(2)
+            .deleteRealmIfMigrationNeeded()
+            .build()
+
+        Realm.setDefaultConfiguration(test)
         realm = Realm.getDefaultInstance()
         txtHeader.text = "$recipient"
 
@@ -99,9 +106,9 @@ class photoboardActivity : AppCompatActivity() {
             actionButton.text = String(Character.toChars(0x1F4E7))
             actionButton.setOnClickListener {
                 val intent = Intent(this, messages::class.java).apply {
-                    putExtra("recipient", "child")
+                    putExtra("recipient", "teachers")
                     putExtra("type", "direct_p")
-                       putExtra("account", account)
+                    putExtra("account", user?.id)
                 }
                 startActivity(intent)
             }
