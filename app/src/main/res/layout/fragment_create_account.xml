@@ -18,27 +18,81 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="parent name"/>
+            android:hint="parent name"
+            android:id="@+id/parentShortName"/>
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="parent username"/>
+            android:hint="parent email"
+            android:id="@+id/parentEmail"/>
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="password"/>
+            android:hint="password"
+            android:id="@+id/parentPassword"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Child information"/>
-        <EditText
+            android:text="account type"/>
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="teacher"
+                android:id="@+id/radioTeacher"
+                android:checked="true"
+                />
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="parent"
+                android:id="@+id/radioParent"/>
+        </RadioGroup>
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="child name"/>
-        <Spinner
-            android:id="@+id/spinClass"
+            android:id="@+id/childTop"
+            android:visibility="gone">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/childInner">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Child information"/>
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="child name"
+                    android:id="@+id/childname"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="class"/>
+                <Spinner
+                    android:id="@+id/spinClass"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="add child"
+                android:id="@+id/addChildBtn"/>
+        </LinearLayout>
+        <Button
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="create account"
+            android:id="@+id/saveBtn"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="clear fields"
+            android:id="@+id/clearBtn"/>
 
 
     </LinearLayout>

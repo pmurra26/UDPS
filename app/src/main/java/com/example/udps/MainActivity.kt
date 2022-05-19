@@ -1,11 +1,22 @@
 package com.example.udps
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+
+import io.realm.log.RealmLog
+import io.realm.mongodb.Credentials
+import io.realm.mongodb.User
+import io.realm.mongodb.mongo.MongoClient
+import io.realm.mongodb.mongo.MongoCollection
+import io.realm.mongodb.mongo.MongoDatabase
+import io.realm.Realm
+import org.bson.Document
 
 /**
  * log in screen code
@@ -14,16 +25,208 @@ import android.widget.Toast
  * and twin_mum, a test account to work out a parent with multiple children.
  */
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var username: EditText
+    private lateinit var password: EditText
+    private lateinit var loginButton: Button
+    private var user: User? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        username = findViewById(R.id.editTextUser)
+        password = findViewById(R.id.editTextPass)
+        loginButton = findViewById<Button>(R.id.loginBtn)
         //attach an action to the log in screen button
-        val loginBtn = findViewById<Button>(R.id.loginBtn)
-        loginBtn.setOnClickListener{
-            validate(findViewById<EditText>(R.id.editTextUser).text.toString(), findViewById<EditText>(R.id.editTextPass).text.toString())
+
+        loginButton.setOnClickListener{
+            login()
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        try {
+            user = UDPSApp.currentUser()
+        } catch (e: IllegalStateException) {
+            RealmLog.warn(e)
+        }
+        if (user != null) {
+            // if no user is currently logged in, start the login activity so the user can authenticate
+            val customUserData : Document? = user?.customData
+            val accountType = customUserData?.get("accountType")
+            val shortName = customUserData?.get("shortName")
+
+            //Log.v("EXAMPLE", "accountType: $test")
+            /*val mongoClient : MongoClient =
+                user?.getMongoClient("mongodb-atlas")!! // service for MongoDB Atlas cluster containing custom user data
+            val mongoDatabase : MongoDatabase =
+                mongoClient.getDatabase("YarmGwanga")!!
+            val mongoCollection : MongoCollection<Document> =
+                mongoDatabase.getCollection("YarmGwangaCustomData")!!
+            mongoCollection.insertOne(Document("ownerId", user!!.id).append("accountType", "teacher").append("_partition", "test"))
+                .getAsync { result ->
+                    if (result.isSuccess) {
+                        Log.v("EXAMPLE", "Inserted custom user data document. _id of inserted document: ${result.get().insertedId}")
+                    } else {
+                        Log.e("EXAMPLE", "Unable to insert custom user data. Error: ${result.error}")
+                    }
+                }*/
+
+            if(accountType=="teacher") {
+                val intent = Intent(this, MainActivity2::class.java).apply {
+                    putExtra("username", shortName.toString())
+                    putExtra("account", "teacher")
+                }
+
+                Toast.makeText(this@MainActivity, "Welcome $username!", Toast.LENGTH_SHORT)
+                    .show()
+                startActivity(intent)
+            }else {
+                val Intent = Intent(this, photoboardActivity::class.java).apply {
+                    putExtra("username", shortName.toString())
+                    putExtra("account", "parent")
+                    putExtra("recipient", "Red Wombats")
+                }
+
+                Toast.makeText(this@MainActivity, "Welcome $username!", Toast.LENGTH_SHORT)
+                    .show()
+                startActivity(Intent)
+
+            }
+        }
+
+    }
+
+    override fun onBackPressed() {
+        // Disable going back to the MainActivity
+        moveTaskToBack(true)
+    }
+
+    private fun onLoginSuccess(partition: String) {
+        // successful login ends this activity, bringing the user back to the task activity
+        val sharedPreference =  getSharedPreferences("prefs name", Context.MODE_PRIVATE)
+        var editor = sharedPreference.edit()
+        editor.putString("partition",partition)
+        editor.commit()
+        user = UDPSApp.currentUser()
+        val customUserData : Document? = user?.customData
+        Log.v("EXAMPLE", "found custom user data document. _id of inserted document: ${customUserData}")
+        val accountType = customUserData?.get("accountType")
+        val shortName = customUserData?.get("shortName")
+        if(accountType=="teacher") {
+            val intent = Intent(this, MainActivity2::class.java).apply {
+                putExtra("username", shortName.toString())
+                putExtra("account", accountType.toString())
+            }
+
+            Toast.makeText(this@MainActivity, "Welcome $shortName!", Toast.LENGTH_SHORT)
+                .show()
+            startActivity(intent)
+        }else if(accountType=="parent") {
+            val Intent = Intent(this, photoboardActivity::class.java).apply {
+                putExtra("username", shortName.toString())
+                putExtra("account", accountType.toString())
+                putExtra("recipient", "Red Wombats")
+            }
+
+            Toast.makeText(this@MainActivity, "Welcome $shortName!", Toast.LENGTH_SHORT)
+                .show()
+            startActivity(Intent)
+
+        } else{
+            val queryFilter = Document("flag", username.text.toString())
+            val mongoClient : MongoClient = user?.getMongoClient("mongodb-atlas")!! // service for MongoDB Atlas cluster containing custom user data
+            val mongoDatabase : MongoDatabase = mongoClient.getDatabase("YarmGwanga")!!
+            val mongoCollection : MongoCollection<Document> = mongoDatabase.getCollection("YarmGwangaCustomData")!!
+
+            mongoCollection.findOne(queryFilter)
+                .getAsync { task ->
+                    if (task.isSuccess) {
+                        val result = task.get()
+                        mongoCollection.insertOne(Document("ownerId", user!!.id).append("_partition", "test")
+                            .append("shortName", result["shortName"]).append("accountType", result["accountType"])
+                            .append("children", result["children"]).append("active", "1")).getAsync { result ->
+                            if (result.isSuccess) {
+                                Log.v("EXAMPLE", "Inserted custom user data document. _id of inserted document: ${result.get().insertedId}")
+                            } else {
+                                Log.e("EXAMPLE", "Unable to insert custom user data. Error: ${result.error}")
+                            }
+                        }
+
+                        result.clear()
+                        Log.v("EXAMPLE", "successfully found a document: $result")
+                        Log.v("EXAMPLE", "successfully found a document: ${username.text.toString()}")
+                        var realm = Realm.getDefaultInstance()
+                        user?.logOutAsync {
+                            if (it.isSuccess) {
+                                // always close the realm when finished interacting to free up resources
+                                realm.close()
+                                user = null
+                                Log.v(TAG(), "user logged out")
+                                //startActivity(Intent(this, MainActivity::class.java))
+                            } else {
+                                RealmLog.error(it.error.toString())
+                                Log.e(TAG(), "log out failed! Error: ${it.error}")
+                            }
+                        }
+                        login()
+                    } else {
+                        Log.e("EXAMPLE", "failed to find document with: ${task.error}")
+                    }
+                }
+        }
+        /*val Intent = Intent(this, photoboardActivity::class.java).apply {
+            putExtra("username", username.text)
+            putExtra("account", "teacher")
+            putExtra("recipient", "teacher" )
+        }
+
+        Toast.makeText(this@MainActivity, "Welcome $username!", Toast.LENGTH_SHORT)
+            .show()
+        startActivity(Intent)*/
+        //finish()
+    }
+    private fun onLoginFailed(errorMsg: String) {
+        Log.v(TAG(), errorMsg)
+        Toast.makeText(baseContext, errorMsg, Toast.LENGTH_LONG).show()
+    }
+    private fun validateCredentials(): Boolean = when {
+        // zero-length usernames and passwords are not valid (or secure), so prevent users from creating accounts with those client-side.
+        username.text.toString().isEmpty() -> false
+        password.text.toString().isEmpty() -> false
+        else -> true
+    }
+
+    private fun login() {
+        if (!validateCredentials()) {
+            onLoginFailed("Invalid username or password")
+            return
+        }
+
+        // while this operation completes, disable the buttons to login or create a new account
+        loginButton.isEnabled = false
+
+        val username = this.username.text.toString()
+        val password = this.password.text.toString()
+
+
+
+        val creds = Credentials.emailPassword(username, password)
+        UDPSApp.loginAsync(creds) {
+            // re-enable the buttons after
+            //loginButton.isEnabled = true
+            if (!it.isSuccess) {
+                RealmLog.error(it.error.toString())
+                onLoginFailed(it.error.message ?: "An error occurred.")
+                loginButton.isEnabled = true
+            } else {
+
+                onLoginSuccess("test")
+            }
+        }
+
+    }
     //log in validation function. will have to be changed completely at some point
     fun validate(username:String, password:String){
         var accounts = arrayOf(arrayOf("kerry", "abc123", "teacher", "teacher"),

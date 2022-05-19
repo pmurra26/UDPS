@@ -4,121 +4,55 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#121212"
     tools:context=".MainActivity2">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_head"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#121212"
         android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <LinearLayout
-            android:id="@+id/homeHeader"
+        app:layout_constraintEnd_toEndOf="parent">
+        <TextView
+            android:id="@+id/head_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-        </LinearLayout>
-
+            android:background="@drawable/shape"
+            android:textColor="#ffffff"
+            android:text=" "
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+        <TextView
+            android:id="@+id/hp_textHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Header"
+            android:textSize="30dp"
+            app:layout_constraintStart_toEndOf="@id/head_image"
+            app:layout_constraintTop_toTopOf="parent" />
         <Button
             android:id="@+id/homeHeaderButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="#00963D"
-            android:text="account management"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:text="account management"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
     <ScrollView
-        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="#121212"
+        app:layout_constraintTop_toBottomOf="@id/cl_head"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cl_head">
+        app:layout_constraintEnd_toEndOf="parent"
+        >
 
         <LinearLayout
             android:id="@+id/ll_home"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#121212"
             android:orientation="vertical">
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/classesTitle"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                app:cardBackgroundColor="#121212">
-
-
-                <View
-                    android:id="@+id/divider"
-                    style="@style/Widget.Material3.Button"
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_gravity="top"
-                    android:background="#00963D" />
-
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="Class Photoboard"
-                    android:textColor="#FFFFFF"
-                    android:textSize="20sp" />
-
-                <View
-                    android:id="@+id/divider2"
-                    style="@style/Widget.Material3.Button"
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_gravity="bottom"
-                    android:background="#00963D" />
-            </androidx.cardview.widget.CardView>
-
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/messageTitle"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                app:cardBackgroundColor="#121212">
-
-                <View
-                    android:id="@+id/divider3"
-                    style="@style/Widget.Material3.Button"
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="#00963D" />
-
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="Messages"
-                    android:textColor="#FFFFFF"
-                    android:textSize="20sp" />
-
-                <View
-                    android:id="@+id/divider4"
-                    style="@style/Widget.Material3.Button"
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_gravity="bottom"
-                    android:background="#00963D" />
-
-            </androidx.cardview.widget.CardView>
 
         </LinearLayout>
     </ScrollView>

@@ -3,6 +3,7 @@ package com.example.udps
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
@@ -10,10 +11,29 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.setPadding
 
+import io.realm.log.RealmLog
+import io.realm.mongodb.Credentials
+import io.realm.mongodb.User
+import io.realm.mongodb.mongo.MongoClient
+import io.realm.mongodb.mongo.MongoCollection
+import io.realm.mongodb.mongo.MongoDatabase
+import io.realm.Realm
+import io.realm.RealmConfiguration
+import org.bson.Document
+
 class photoboardActivity : AppCompatActivity() {
+    private lateinit var realm: Realm
+    private var user: User? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_photoboard)
+    }
+    override fun onBackPressed() {
+        // Disable going back to the MainActivity
+        val accountT = intent.getStringExtra("account")
+        if (accountT == "parent"){moveTaskToBack(true)}
+        else super.onBackPressed()
     }
 
     override fun onResume() {
@@ -23,7 +43,31 @@ class photoboardActivity : AppCompatActivity() {
         val accountT = intent.getStringExtra("account")
         val account = intent.getStringExtra("username")
         val actionButton = findViewById<Button>(R.id.head_actionButton)
+        val headImg = findViewById<TextView>(R.id.head_image)
+        user = UDPSApp.currentUser()
+        val test = RealmConfiguration.Builder().name("default3")
+            .schemaVersion(2)
+            .deleteRealmIfMigrationNeeded()
+            .build()
+
+        Realm.setDefaultConfiguration(test)
+        realm = Realm.getDefaultInstance()
         txtHeader.text = "$recipient"
+
+        headImg.setOnClickListener(){
+            user?.logOutAsync {
+                if (it.isSuccess) {
+                    // always close the realm when finished interacting to free up resources
+                    realm.close()
+                    user = null
+                    Log.v(TAG(), "user logged out")
+                    startActivity(Intent(this, MainActivity::class.java))
+                } else {
+                    RealmLog.error(it.error.toString())
+                    Log.e(TAG(), "log out failed! Error: ${it.error}")
+                }
+            }
+        }
         val images = arrayOf(R.drawable.test_pic_01, R.drawable.test_pic_02, R.drawable.test_pic_03, R.drawable.test_pic_04,
             R.drawable.test_pic_05, R.drawable.test_pic_06, R.drawable.test_pic_07, R.drawable.test_pic_08,
             R.drawable.test_pic_09, R.drawable.test_pic_10, R.drawable.test_pic_11, R.drawable.test_pic_12,
@@ -62,9 +106,9 @@ class photoboardActivity : AppCompatActivity() {
             actionButton.text = String(Character.toChars(0x1F4E7))
             actionButton.setOnClickListener {
                 val intent = Intent(this, messages::class.java).apply {
-                    putExtra("recipient", "child")
+                    putExtra("recipient", "teachers")
                     putExtra("type", "direct_p")
-                       putExtra("account", account)
+                    putExtra("account", user?.id)
                 }
                 startActivity(intent)
             }
