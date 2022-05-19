@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
-    app:cardBackgroundColor="#72A7FC"
+    app:cardBackgroundColor="#b3f7ff"
     app:cardCornerRadius="8dp"
     app:cardElevation="5dp"
     app:contentPadding="4dp"

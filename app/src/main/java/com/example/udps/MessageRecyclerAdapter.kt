@@ -20,10 +20,28 @@ import org.bson.types.ObjectId
 
 internal class MessageRecyclerAdapter(data: OrderedRealmCollection<messagesItem>): RealmRecyclerViewAdapter<messagesItem, MessageRecyclerAdapter.ViewHolder?>(data, true) {
     lateinit var _parent:ViewGroup
+
+
+    override fun getItemViewType(position: Int): Int {
+        val item = getItem(position)
+        val user = UDPSApp.currentUser()
+        if(item?.sender==user?.id) return 1 //if you sent the message
+        else if (item?.sender!=user?.id&&user?.id==item?.conversation) return 2 //if you didnt send the message AND you are the parent
+        else if(item?.sender!=user?.id&&item?.sender==item?.conversation)return 2 //if you didnt send the message AND the parent sent the message
+        else if(item?.sender!=user?.id&&item?.sender!=item?.conversation)return 3 //if you didnt send the message AND the parent didnt send the message
+        else return 0
+
+        return super.getItemViewType(position)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val user = UDPSApp.currentUser()
-
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.message_sent_cardview, parent, false)
+        var v:View = when(viewType){
+            1-> LayoutInflater.from(parent.context).inflate(R.layout.message_sent_cardview, parent, false)
+            2-> LayoutInflater.from(parent.context).inflate(R.layout.message_received_cardview, parent, false)
+            3-> LayoutInflater.from(parent.context).inflate(R.layout.message_received2_cardview, parent, false)
+            else -> LayoutInflater.from(parent.context).inflate(R.layout.message_sent_cardview, parent, false)
+        }
         _parent = parent
         return ViewHolder(v)
     }

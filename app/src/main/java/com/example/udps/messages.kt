@@ -33,6 +33,8 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 
+
+
 class messages : AppCompatActivity() {
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private var user: User? = null
@@ -111,10 +113,11 @@ class messages : AppCompatActivity() {
             val timeRaw = LocalDateTime.now()
             val formatter = DateTimeFormatter.ofPattern("dd-MM-yy HH:mm")
             val formatted = timeRaw.format(formatter)
-            var toInsert = messagesItem(ObjectId(), user?.id,
+            var toInsert = messagesItem(user?.id,
                 user?.customData?.get("shortName")?.toString(), formatted, inputTA.text.toString(), account)
             realm.executeTransactionAsync { realm ->
                 realm.insert(toInsert)
+
             }
             /*mongoCollection?.insertOne(toInsert)?.getAsync { result ->
                     if (result.isSuccess) {
@@ -275,6 +278,7 @@ class messages : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
         recyclerView.setHasFixedSize(true)
+        recyclerView.scrollToPosition(adapter.itemCount-1)
         //recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
     }
 }
