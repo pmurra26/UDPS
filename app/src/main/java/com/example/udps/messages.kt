@@ -132,8 +132,11 @@ class messages : AppCompatActivity() {
         }
         val imgCapture = findViewById<Button>(R.id.buttonPicture)
         imgCapture.setOnClickListener{
-            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            resultLauncher.launch(intent)
+            val Intent = Intent(this, cameraActivity::class.java).apply {
+                putExtra("source", "messages")
+                //putExtra("account", account)
+            }
+            startActivity(Intent)
         }
 
 
