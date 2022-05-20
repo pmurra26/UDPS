@@ -29,6 +29,14 @@ import java.util.concurrent.Executors
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
+import io.realm.Realm
+import io.realm.mongodb.User
+import io.realm.mongodb.mongo.MongoClient
+import io.realm.mongodb.mongo.MongoCollection
+import io.realm.mongodb.mongo.MongoDatabase
+import org.bson.Document
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 
 typealias LumaListener = (luma: Double) -> Unit
@@ -45,6 +53,11 @@ class cameraActivity : AppCompatActivity() {
     private lateinit var cameraExecutor: ExecutorService
 
     lateinit var storage: FirebaseStorage
+
+    private var user : User? = null
+    private lateinit var realm: Realm
+
+    lateinit var account:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,6 +80,17 @@ class cameraActivity : AppCompatActivity() {
         cameraExecutor = Executors.newSingleThreadExecutor()
 
         storage = Firebase.storage
+
+        user = UDPSApp.currentUser()
+        account = intent.getStringExtra("account").toString()
+
+
+
+        realm = Realm.getDefaultInstance()
+        val mongoClient : MongoClient = user?.getMongoClient("mongodb-atlas")!! // service for MongoDB Atlas cluster containing custom user data
+        val mongoDatabase : MongoDatabase = mongoClient.getDatabase("YarmGwanga")!!
+        val mongoCollection : MongoCollection<Document> = mongoDatabase.getCollection("Messages")!!
+
     }
 
     private fun takePhoto() {
@@ -132,6 +156,15 @@ class cameraActivity : AppCompatActivity() {
                             if (task.isSuccessful) {
                                 val downloadUri = task.result
                                 Log.e(TAG, "Photo capture succeded, url: ${downloadUri}")
+                                val timeRaw = LocalDateTime.now()
+                                val formatter = DateTimeFormatter.ofPattern("dd-MM-yy HH:mm")
+                                val formatted = timeRaw.format(formatter)
+                                var toInsert = messagesItem(user?.id,
+                                    user?.customData?.get("shortName")?.toString(), formatted, null, downloadUri.toString(), account)
+                                realm.executeTransactionAsync { realm ->
+                                    realm.insert(toInsert)
+
+                                }
                             } else {
                                 Log.e(TAG, "Photo capture failed")
                                 // Handle failures

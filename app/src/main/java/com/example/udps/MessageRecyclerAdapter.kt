@@ -3,16 +3,16 @@ package com.example.udps
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.realm.OrderedRealmCollection
 import io.realm.RealmRecyclerViewAdapter
 import android.app.AlertDialog
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.AsyncTask
 import android.util.Log
 import android.view.*
-import android.widget.EditText
-import android.widget.PopupMenu
+import android.widget.*
 import io.realm.Realm
 import io.realm.kotlin.where
 import org.bson.types.ObjectId
@@ -51,8 +51,10 @@ internal class MessageRecyclerAdapter(data: OrderedRealmCollection<messagesItem>
         holder.data = obj
         holder.senderTxt.text = obj?.senderSname
         holder.timeTxt.text = obj?.time
-        holder.messageTxt.text = obj?.message
+        if(obj?.message!=null)holder.messageTxt.text = obj?.message
         holder.sender = obj?.sender
+        if(obj?.image!=null) DownloadImageFromInternet(holder.messageImg).execute(obj?.image)
+
 
     }
 
@@ -69,6 +71,31 @@ internal class MessageRecyclerAdapter(data: OrderedRealmCollection<messagesItem>
             messageTxt = itemView.findViewById(R.id.messageTxt)
             messageImg = itemView.findViewById(R.id.messageImg)
             sender = " "
+        }
+    }
+    //@SuppressLint("StaticFieldLeak")
+    @Suppress("DEPRECATION")
+    private inner class DownloadImageFromInternet(var imageView: ImageView) : AsyncTask<String, Void, Bitmap?>() {
+        override fun doInBackground(vararg urls: String): Bitmap? {
+            Log.e("dlpic", "started in background")
+            val imageURL = urls[0]
+            var image: Bitmap? = null
+            try {
+                val `in` = java.net.URL(imageURL).openStream()
+                image = BitmapFactory.decodeStream(`in`)
+                Log.e("dlpic", "done in background")
+            }
+            catch (e: Exception) {
+                Log.e("Error Message", e.message.toString())
+                e.printStackTrace()
+                Log.e("dlpic", "done in background")
+            }
+            return image
+            Log.e("dlpic", "done in background")
+        }
+        override fun onPostExecute(result: Bitmap?) {
+            imageView.setImageBitmap(result)
+            Log.e("dlpic", "setting image")
         }
     }
 

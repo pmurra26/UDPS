@@ -114,7 +114,7 @@ class messages : AppCompatActivity() {
             val formatter = DateTimeFormatter.ofPattern("dd-MM-yy HH:mm")
             val formatted = timeRaw.format(formatter)
             var toInsert = messagesItem(user?.id,
-                user?.customData?.get("shortName")?.toString(), formatted, inputTA.text.toString(), account)
+                user?.customData?.get("shortName")?.toString(), formatted, inputTA.text.toString(), null, account)
             realm.executeTransactionAsync { realm ->
                 realm.insert(toInsert)
 
@@ -134,6 +134,7 @@ class messages : AppCompatActivity() {
         imgCapture.setOnClickListener{
             val Intent = Intent(this, cameraActivity::class.java).apply {
                 putExtra("source", "messages")
+                putExtra("account", account)
                 //putExtra("account", account)
             }
             startActivity(Intent)
