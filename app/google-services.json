@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "290225727038",
+    "project_id": "udps-604f8",
+    "storage_bucket": "udps-604f8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:290225727038:android:9dcb7ffa165f6f7600d36f",
+        "android_client_info": {
+          "package_name": "com.example.udps"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "290225727038-itsi648ocq4edtaf5i91kjmh2u2n9i5f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCE1e3Y5ZOtu1H8op18PLP-bFhGVD9RjDI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "290225727038-itsi648ocq4edtaf5i91kjmh2u2n9i5f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

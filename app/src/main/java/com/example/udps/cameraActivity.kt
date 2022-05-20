@@ -5,6 +5,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -25,6 +26,10 @@ import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
+
 
 typealias LumaListener = (luma: Double) -> Unit
 
@@ -38,6 +43,8 @@ class cameraActivity : AppCompatActivity() {
     private var recording: Recording? = null
 
     private lateinit var cameraExecutor: ExecutorService
+
+    lateinit var storage: FirebaseStorage
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +65,8 @@ class cameraActivity : AppCompatActivity() {
         viewBinding.delBtn.setOnClickListener(){}
 
         cameraExecutor = Executors.newSingleThreadExecutor()
+
+        storage = Firebase.storage
     }
 
     private fun takePhoto() {
@@ -103,17 +112,41 @@ class cameraActivity : AppCompatActivity() {
                     viewBinding.imageCaptureButton.visibility = View.GONE
                     viewBinding.viewFinder.visibility=View.GONE
                     viewBinding.previewImg.setImageURI(output.savedUri)
+                    val photo = File(output.savedUri?.path)
+                    val photo2 = File("storage/emulated/0/Pictures/UDPS-image/"+name+".jpg")
 
 
-                    viewBinding.saveBtn.setOnClickListener(){}
+                    viewBinding.saveBtn.setOnClickListener(){
+                        var storageRef = storage.reference
+                        var file = Uri.fromFile(photo2)
+                        val photoRef = storageRef.child("images/${file.lastPathSegment}")
+                        val uploadTask = photoRef.putFile(file)
+                        val urlTask = uploadTask.continueWithTask { task ->
+                            if (!task.isSuccessful) {
+                                task.exception?.let {
+                                    throw it
+                                }
+                            }
+                            photoRef.downloadUrl
+                        }.addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                val downloadUri = task.result
+                                Log.e(TAG, "Photo capture succeded, url: ${downloadUri}")
+                            } else {
+                                Log.e(TAG, "Photo capture failed")
+                                // Handle failures
+                                // ...
+                            }
+                        }
+
+                    }
                     viewBinding.delBtn.setOnClickListener(){
                         viewBinding.saveBtn.visibility = View.GONE
                         viewBinding.delBtn.visibility = View.GONE
                         viewBinding.previewImg.visibility = View.GONE
                         viewBinding.imageCaptureButton.visibility = View.VISIBLE
                         viewBinding.viewFinder.visibility=View.VISIBLE
-                        val fdelete = File(output.savedUri?.path)
-                        fdelete.delete()
+                        photo2.delete()
                     }
                     Log.d(TAG, msg)
                 }
