@@ -141,6 +141,8 @@ class cameraActivity : AppCompatActivity() {
 
 
                     viewBinding.saveBtn.setOnClickListener(){
+                        viewBinding.saveBtn.isEnabled=false
+                        viewBinding.delBtn.isEnabled=false
                         var storageRef = storage.reference
                         var file = Uri.fromFile(photo2)
                         val photoRef = storageRef.child("images/${file.lastPathSegment}")
@@ -165,6 +167,7 @@ class cameraActivity : AppCompatActivity() {
                                     realm.insert(toInsert)
 
                                 }
+                                finish()
                             } else {
                                 Log.e(TAG, "Photo capture failed")
                                 // Handle failures

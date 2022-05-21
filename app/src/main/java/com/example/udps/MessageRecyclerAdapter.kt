@@ -1,21 +1,20 @@
 package com.example.udps
 
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
-import io.realm.OrderedRealmCollection
-import io.realm.RealmRecyclerViewAdapter
-import android.app.AlertDialog
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.AsyncTask
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.*
 import android.widget.*
-import io.realm.Realm
-import io.realm.kotlin.where
-import org.bson.types.ObjectId
+import androidx.core.content.ContextCompat.startActivity
+import androidx.recyclerview.widget.RecyclerView
+import io.realm.OrderedRealmCollection
+import io.realm.RealmRecyclerViewAdapter
+import java.util.concurrent.Executors
 
 
 internal class MessageRecyclerAdapter(data: OrderedRealmCollection<messagesItem>): RealmRecyclerViewAdapter<messagesItem, MessageRecyclerAdapter.ViewHolder?>(data, true) {
@@ -53,7 +52,35 @@ internal class MessageRecyclerAdapter(data: OrderedRealmCollection<messagesItem>
         holder.timeTxt.text = obj?.time
         if(obj?.message!=null)holder.messageTxt.text = obj?.message
         holder.sender = obj?.sender
-        if(obj?.image!=null) DownloadImageFromInternet(holder.messageImg).execute(obj?.image)
+        if(obj?.image!=null) {
+            val imageURL = obj?.image
+            val executor = Executors.newSingleThreadExecutor()
+            val handler = Handler(Looper.getMainLooper())
+            var image: Bitmap? = null
+            executor.execute {
+                //val imageURL = obj?.image
+                try {
+                    val `in` = java.net.URL(imageURL).openStream()
+                    image = BitmapFactory.decodeStream(`in`)
+                    handler.post {
+                        holder.messageImg.setImageBitmap(image)
+                    }
+                }
+                catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+            //DownloadImageFromInternet(holder.messageImg).execute(obj?.image)
+            holder.messageImg.visibility=View.VISIBLE
+            holder.messageImg.isClickable=true
+            holder.messageImg.setOnClickListener(){
+                val openURL = Intent(Intent.ACTION_VIEW)
+                openURL.data = Uri.parse(imageURL)
+                holder.messageImg.context.startActivity(openURL)
+
+
+            }
+        }
 
 
     }
