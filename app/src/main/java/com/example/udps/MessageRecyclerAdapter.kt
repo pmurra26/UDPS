@@ -46,6 +46,7 @@ internal class MessageRecyclerAdapter(data: OrderedRealmCollection<messagesItem>
     }
 
     override fun onBindViewHolder(holder: MessageRecyclerAdapter.ViewHolder, position: Int) {
+        Log.e("bindviewholder position", "position: $position")
         val obj:messagesItem? = getItem(position)
         holder.data = obj
         holder.senderTxt.text = obj?.senderSname

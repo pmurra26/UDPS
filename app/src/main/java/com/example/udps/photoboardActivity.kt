@@ -113,6 +113,15 @@ class photoboardActivity : AppCompatActivity() {
                 startActivity(intent)
             }
 
+        }else{
+            actionButton.setOnClickListener {
+                val intent = Intent(this, photoboardPostActivity::class.java).apply {
+                    putExtra("source", "teachers")
+                    putExtra("type", "direct_p")
+                    putExtra("account", user?.id)
+                }
+                startActivity(intent)
+            }
         }
     }
 }

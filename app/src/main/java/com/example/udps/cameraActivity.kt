@@ -4,6 +4,7 @@ package com.example.udps
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.ContentValues
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
@@ -58,6 +59,7 @@ class cameraActivity : AppCompatActivity() {
     private lateinit var realm: Realm
 
     lateinit var account:String
+    lateinit var source:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,6 +85,7 @@ class cameraActivity : AppCompatActivity() {
 
         user = UDPSApp.currentUser()
         account = intent.getStringExtra("account").toString()
+        source = intent.getStringExtra("source").toString()
 
 
 
@@ -98,7 +101,7 @@ class cameraActivity : AppCompatActivity() {
         val imageCapture = imageCapture ?: return
 
         // Create time stamped name and MediaStore entry.
-        val name = SimpleDateFormat(FILENAME_FORMAT, Locale.US)
+        val name = user?.customData?.get("shortName").toString()+SimpleDateFormat(FILENAME_FORMAT, Locale.US)
             .format(System.currentTimeMillis())
         val contentValues = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, name)
@@ -158,14 +161,27 @@ class cameraActivity : AppCompatActivity() {
                             if (task.isSuccessful) {
                                 val downloadUri = task.result
                                 Log.e(TAG, "Photo capture succeded, url: ${downloadUri}")
-                                val timeRaw = LocalDateTime.now()
-                                val formatter = DateTimeFormatter.ofPattern("dd-MM-yy HH:mm")
-                                val formatted = timeRaw.format(formatter)
-                                var toInsert = messagesItem(user?.id,
-                                    user?.customData?.get("shortName")?.toString(), formatted, null, downloadUri.toString(), account)
-                                realm.executeTransactionAsync { realm ->
-                                    realm.insert(toInsert)
+                                if(source=="messages") {
+                                    val timeRaw = LocalDateTime.now()
+                                    val formatter = DateTimeFormatter.ofPattern("dd-MM-yy HH:mm")
+                                    val formatted = timeRaw.format(formatter)
+                                    var toInsert = messagesItem(
+                                        user?.id,
+                                        user?.customData?.get("shortName")?.toString(),
+                                        formatted,
+                                        null,
+                                        downloadUri.toString(),
+                                        account
+                                    )
+                                    realm.executeTransactionAsync { realm ->
+                                        realm.insert(toInsert)
 
+                                    }
+                                }else if(source=="post"){
+                                    val intent = Intent()
+                                    intent.putExtra("url", downloadUri.toString())
+                                    Log.e(TAG, "Photo returned:${downloadUri.toString()}")
+                                    setResult(RESULT_OK, intent)
                                 }
                                 finish()
                             } else {

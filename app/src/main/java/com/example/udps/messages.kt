@@ -3,22 +3,17 @@ package com.example.udps
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Bundle
-import android.os.Message
-import android.provider.MediaStore
 import android.util.Log
 import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.*
-import androidx.recyclerview.widget.RecyclerView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.udps.MessageRecyclerAdapter
-import com.example.udps.messagesItem
+import androidx.recyclerview.widget.RecyclerView
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.kotlin.where
@@ -27,12 +22,8 @@ import io.realm.mongodb.mongo.MongoClient
 import io.realm.mongodb.mongo.MongoCollection
 import io.realm.mongodb.mongo.MongoDatabase
 import org.bson.Document
-import org.bson.types.ObjectId
-
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-
-
 
 
 class messages : AppCompatActivity() {
@@ -65,8 +56,15 @@ class messages : AppCompatActivity() {
                     handleCameraImage(result.data)
                 }
             }
+        val pickPicture = findViewById<Button>(R.id.buttonPictureSelect)
+        pickPicture.setOnClickListener {
+            imageChooser()
+        }
+
 
     }
+
+
     override fun onResume(){
         super.onResume()
         setContentView(R.layout.activity_messages)
@@ -162,9 +160,9 @@ class messages : AppCompatActivity() {
         val messageSV = findViewById<LinearLayout>(R.id.ll_messages_scrolling)
         val messageCL = LinearLayout(this)
         val messageSpacer = LinearLayout(this)
-        val messageHT= LinearLayout(this)
-        val messageHL= LinearLayout(this)
-        val messageHD= LinearLayout(this)
+        val messageHT = LinearLayout(this)
+        val messageHL = LinearLayout(this)
+        val messageHD = LinearLayout(this)
         val message4 = LinearLayout(this)
         val senderL = TextView(this)
         val timeRCVD = TextView(this)
@@ -193,7 +191,7 @@ class messages : AppCompatActivity() {
         hlp.weight = 50F
         messageHL.layoutParams = hlp
         messageHD.layoutParams = hlp
-        messageHD.gravity =Gravity.RIGHT
+        messageHD.gravity = Gravity.RIGHT
 
 
         messageSpacer.layoutParams = LinearLayout.LayoutParams(
@@ -218,14 +216,14 @@ class messages : AppCompatActivity() {
         messageHT.addView(messageHD)
         messageCL.addView(messageHT)
 
-        if (type=="text"){
+        if (type == "text") {
             message.text = content.toString()
             message.layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
             messageCL.addView(message)
-        } else if(type == "image"){
+        } else if (type == "image") {
             image.setImageResource(content as Int)
             /*if(messageHistory[i][2]=="test_picture1.jpeg"){
                 val testarray = arrayOf(R.drawable.test_pic_01, "test")
@@ -239,7 +237,7 @@ class messages : AppCompatActivity() {
             )
             messageCL.addView(image)
 
-        }else{
+        } else {
             image.setImageBitmap(content as Bitmap)
             /*if(messageHistory[i][2]=="test_picture1.jpeg"){
                 val testarray = arrayOf(R.drawable.test_pic_01, "test")
@@ -255,14 +253,14 @@ class messages : AppCompatActivity() {
 
         }
 
-        if(intent.getStringExtra("account").toString()==sender){
+        if (intent.getStringExtra("account").toString() == sender) {
             messageCL.setBackgroundResource(R.drawable.shape_sent)
             val lp = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT)
             lp.weight = 66f
             val lp2 = LinearLayout.LayoutParams(0, 0)
             lp2.weight = 33f
             messageCL.layoutParams = lp
-            messageSpacer.layoutParams=lp2
+            messageSpacer.layoutParams = lp2
             message4.addView(messageSpacer)
             message4.addView(messageCL)
             messageSV.addView(message4)
@@ -272,6 +270,39 @@ class messages : AppCompatActivity() {
         }
     }
 
+
+    fun imageChooser() {
+
+        // create an instance of the
+        // intent of the type image
+        val i = Intent()
+        i.type = "image/*"
+        i.action = Intent.ACTION_GET_CONTENT
+
+        // pass the constant to compare it
+        // with the returned requestCode
+        startActivityForResult(Intent.createChooser(i, "Select Picture"), 200)
+    }
+
+    // this function is triggered when user
+    // selects the image from the imageChooser
+    /*fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK) {
+
+            // compare the resultCode with the
+            // SELECT_PICTURE constant
+            if (requestCode == 200) {
+                // Get the url of the image from data
+                val selectedImageUri: Uri? = data.data
+                if (null != selectedImageUri) {
+                    // update the preview image in the layout
+                    //IVPreviewImage.setImageURI(selectedImageUri)
+                }
+            }
+        }
+    }
+*/
 
     private fun setUpRecyclerView(realm: Realm, account:String) {
         // a recyclerview requires an adapter, which feeds it items to display.

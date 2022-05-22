@@ -68,14 +68,21 @@
             android:text="P"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+        <Button
+            android:id="@+id/buttonPictureSelect"
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:text="P"
+            app:layout_constraintStart_toEndOf="@id/buttonPicture"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/TAmessageInput"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="type your message here"
-            app:layout_constraintEnd_toEndOf="@id/buttonSend"
-            app:layout_constraintStart_toEndOf="@+id/buttonPicture"
+            app:layout_constraintEnd_toStartOf="@id/buttonSend"
+            app:layout_constraintStart_toEndOf="@+id/buttonPictureSelect"
             app:layout_constraintTop_toTopOf="parent" />
         <Button
             android:id="@+id/buttonSend"
