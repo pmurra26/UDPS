@@ -51,9 +51,9 @@ internal class MessageRecyclerAdapter(data: OrderedRealmCollection<messagesItem>
         holder.data = obj
         holder.senderTxt.text = obj?.senderSname
         holder.timeTxt.text = obj?.time
-        if(obj?.message!=null)holder.messageTxt.text = obj?.message
+        if(obj?.message!="")holder.messageTxt.text = obj?.message
         holder.sender = obj?.sender
-        if(obj?.image!=null) {
+        if(obj?.image!="") {
             val imageURL = obj?.image
             val executor = Executors.newSingleThreadExecutor()
             val handler = Handler(Looper.getMainLooper())

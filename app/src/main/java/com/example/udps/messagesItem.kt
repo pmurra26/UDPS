@@ -10,16 +10,23 @@ import org.bson.codecs.pojo.annotations.BsonProperty
 
 
 
-open class messagesItem(var sender: String? = "unknown",
-                        var senderSname: String? = "unknown",
-                        var time: String? = "0",
-                        var message: String? = null,
-                        var image:String? = null,
-                        var conversation: String? = "unknown",
-                        @field:BsonProperty("_partition") // specify that this is a field-level annotation
-                        var partition : String? = "test"):RealmObject() {
+open class messagesItem(sender: String = "unknown",
+                        senderSname: String = "unknown",
+                        time: String = "0",
+                        message: String = " ",
+                        image:String = " ",
+                        conversation: String = "unknown",
+                        partition: String= "test"):RealmObject() {
     @PrimaryKey var _id: ObjectId = ObjectId()
+    var _partition:String = partition
+    var sender:String =sender
+    var senderSname:String = senderSname
+    var time:String = time
+    var conversation:String = conversation
+    @Required var message:String = message
+    @Required var image:String = image
+
     override fun toString(): String {
-        return "Message: [id=$_id, Sender=$sender, SenderShortname=$senderSname, date=$time, message=$message, conversation =$conversation partition=$partition]"
+        return "Message: [id=$_id, Sender=$sender, SenderShortname=$senderSname, date=$time, message=$message, conversation =$conversation partition=$_partition]"
     }
 }

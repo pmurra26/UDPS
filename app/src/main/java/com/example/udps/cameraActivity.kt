@@ -166,10 +166,10 @@ class cameraActivity : AppCompatActivity() {
                                     val formatter = DateTimeFormatter.ofPattern("dd-MM-yy HH:mm")
                                     val formatted = timeRaw.format(formatter)
                                     var toInsert = messagesItem(
-                                        user?.id,
-                                        user?.customData?.get("shortName")?.toString(),
+                                        user!!.id,
+                                        user!!.customData!!.get("shortName")!!.toString(),
                                         formatted,
-                                        null,
+                                        "",
                                         downloadUri.toString(),
                                         account
                                     )
@@ -269,7 +269,7 @@ class cameraActivity : AppCompatActivity() {
 
     companion object {
         private const val TAG = "CameraXApp"
-        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
+        const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
         private const val REQUEST_CODE_PERMISSIONS = 10
         private val REQUIRED_PERMISSIONS =
             mutableListOf (

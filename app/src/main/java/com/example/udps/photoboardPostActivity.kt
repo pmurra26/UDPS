@@ -30,6 +30,9 @@ class photoboardPostActivity : AppCompatActivity() {
 
     lateinit var url:String
     lateinit var placeholderTxt:TextView
+    var mode=0
+
+
     val resultContract=registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result?.resultCode == Activity.RESULT_OK) {
             placeholderTxt.text = "got image: $result"
@@ -49,6 +52,8 @@ class photoboardPostActivity : AppCompatActivity() {
                         handler.post {
                             previewImg.setImageBitmap(image)
                             placeholderTxt.visibility= View.GONE
+                            postBtn.isEnabled=true
+                            mode=2
                         }
                     } catch (e: Exception) {
                         e.printStackTrace()
@@ -61,6 +66,15 @@ class photoboardPostActivity : AppCompatActivity() {
 
         }
     }
+    val loadImg = registerForActivityResult(ActivityResultContracts.GetContent(),
+        ActivityResultCallback {
+            if (it!=null) {
+                previewImg.setImageURI(it)
+                placeholderTxt.visibility=View.GONE
+                postBtn.isEnabled=true
+                mode=1
+            }
+        })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,6 +95,7 @@ class photoboardPostActivity : AppCompatActivity() {
         postBtn.setOnClickListener(){
             makePost()
         }
+        postBtn.isEnabled=false
 
     }
 
@@ -97,17 +112,9 @@ class photoboardPostActivity : AppCompatActivity() {
         resultContract.launch(intent)
 
     }
-    private val getResult =
-        registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) {
-            if (it.resultCode == Activity.RESULT_OK) {
-                val value = it.data?.getStringExtra("input")
-            }
-        }
-
 
     private fun selectFromGallery() {
-        TODO("Not yet implemented")
+        loadImg.launch("image/*")
+
     }
 }

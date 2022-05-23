@@ -1,14 +1,19 @@
 package com.example.udps
 
 import android.app.Activity
+import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.Gravity
+import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -16,14 +21,24 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.realm.Realm
 import io.realm.RealmConfiguration
+
 import io.realm.kotlin.where
 import io.realm.mongodb.User
 import io.realm.mongodb.mongo.MongoClient
 import io.realm.mongodb.mongo.MongoCollection
 import io.realm.mongodb.mongo.MongoDatabase
+import io.realm.mongodb.sync.SyncConfiguration
+
 import org.bson.Document
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
+
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class messages : AppCompatActivity() {
@@ -32,13 +47,72 @@ class messages : AppCompatActivity() {
     private lateinit var adapter: MessageRecyclerAdapter
     private lateinit var realm: Realm
     private lateinit var recyclerView: RecyclerView
+    lateinit var account:String
 
+    lateinit var storage: FirebaseStorage
+
+    lateinit var test:SyncConfiguration
+
+        /*
+    RealmConfiguration.Builder().name("default3")
+        .schemaVersion(2)
+        .deleteRealmIfMigrationNeeded()
+        .build()
+*/
 
     var messageHistory = mutableListOf<Array<out Any>>(arrayOf("kerry", "10:50, 24/03", "test message from \"kerry\"", "text"),
         arrayOf("annie_mum", "10:52, 24/03", "test message from \"annie_mum\"", "text"),
         arrayOf("kerry", "10:50, 24/03", R.drawable.test_pic_01, "image"),
         arrayOf("annie_mum", "10:52, 24/03", R.drawable.test_pic_02, "image"))
 
+    val loadImg = registerForActivityResult(ActivityResultContracts.GetContent(),
+        ActivityResultCallback {
+            if (it!=null) {
+                storage = Firebase.storage
+                val name = user?.customData?.get("shortName").toString()+ SimpleDateFormat(
+                    cameraActivity.FILENAME_FORMAT, Locale.US)
+                    .format(System.currentTimeMillis())
+                val contentValues = ContentValues().apply {
+                    put(MediaStore.MediaColumns.DISPLAY_NAME, name)
+                    put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+                    if(Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+                        put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/UDPS-image")
+                    }
+                }
+                var storageRef = storage.reference
+                var file = it
+                val photoRef = storageRef.child("images/${file.lastPathSegment}")
+                val uploadTask = photoRef.putFile(file)
+                val urlTask = uploadTask.continueWithTask { task ->
+                    if (!task.isSuccessful) {
+                        task.exception?.let {
+                            throw it
+                        }
+                    }
+                    photoRef.downloadUrl
+                }.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val downloadUri = task.result
+                        Log.e("message from gallery", "Photo upload succeded, url: ${downloadUri}")
+
+                        val timeRaw = LocalDateTime.now()
+                        val formatter = DateTimeFormatter.ofPattern("dd-MM-yy HH:mm")
+                        val formatted = timeRaw.format(formatter)
+                        var toInsert = messagesItem(
+                            user!!.id,
+                            user!!.customData!!.get("shortName")!!.toString(),
+                            formatted,
+                            "",
+                            downloadUri.toString(),
+                            account
+                        )
+                        realm.executeTransactionAsync { realm ->
+                            realm.insert(toInsert)
+                        }
+                    }
+                }
+            }
+        })
 
     //override fun onStart() {
       //  super.onStart()
@@ -49,17 +123,25 @@ class messages : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_messages)
         println(savedInstanceState==null)
-
-        resultLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == Activity.RESULT_OK) {
-                    handleCameraImage(result.data)
-                }
-            }
         val pickPicture = findViewById<Button>(R.id.buttonPictureSelect)
         pickPicture.setOnClickListener {
-            imageChooser()
+            loadImg.launch("image/*")
+            Log.e("pick button", "pickbuton pressed")
         }
+
+        user = UDPSApp.currentUser()
+        test = SyncConfiguration.Builder(user!!, "test")
+            .waitForInitialRemoteData()
+            .build()
+
+        Realm.setDefaultConfiguration(test)
+        Realm.getInstanceAsync(test, object: Realm.Callback() {
+            override fun onSuccess(realm: Realm) {
+                // since this realm should live exactly as long as this activity, assign the realm to a member variable
+                this@messages.realm = realm
+                //setUpRecyclerView(realm)
+            }
+        })
 
 
     }
@@ -71,7 +153,7 @@ class messages : AppCompatActivity() {
 
         val recipient:String = intent.getStringExtra("recipient").toString()//recipient shortname
         val type:String =intent.getStringExtra("type").toString()
-        val account:String = intent.getStringExtra("account").toString()//recipient id
+        account = intent.getStringExtra("account").toString()//recipient id
         val txtHeader = findViewById<TextView>(R.id.textHeader)
         when(type){
             "direct_t"->txtHeader.text = "$recipient's parents"
@@ -80,10 +162,11 @@ class messages : AppCompatActivity() {
             else ->txtHeader.text = "something has gone terribly wrong. type = $type , recipient =  $recipient"
         }
 
-        val test = RealmConfiguration.Builder().name("default3")
-            .schemaVersion(2)
-            .deleteRealmIfMigrationNeeded()
+        user = UDPSApp.currentUser()
+        test = SyncConfiguration.Builder(user!!, "test")
+            .waitForInitialRemoteData()
             .build()
+
         Realm.getInstanceAsync(test, object: Realm.Callback() {
             override fun onSuccess(realm: Realm) {
                 // since this realm should live exactly as long as this activity, assign the realm to a member variable
@@ -93,10 +176,7 @@ class messages : AppCompatActivity() {
             }
         })
 
-        //for(i in messageHistory.indices){
-            //buildMessage(messageHistory[i][0] as String, messageHistory[i][1]  as String,messageHistory[i][3]  as String,messageHistory[i][2] )
-        //}
-        user = UDPSApp.currentUser()
+
 
 
 
@@ -111,8 +191,8 @@ class messages : AppCompatActivity() {
             val timeRaw = LocalDateTime.now()
             val formatter = DateTimeFormatter.ofPattern("dd-MM-yy HH:mm")
             val formatted = timeRaw.format(formatter)
-            var toInsert = messagesItem(user?.id,
-                user?.customData?.get("shortName")?.toString(), formatted, inputTA.text.toString(), null, account)
+            var toInsert = messagesItem(user!!.id,
+                user!!.customData!!.get("shortName")!!.toString(), formatted, inputTA.text.toString(), "", account)
             realm.executeTransactionAsync { realm ->
                 realm.insert(toInsert)
 
@@ -129,6 +209,7 @@ class messages : AppCompatActivity() {
             inputTA.text.clear()
         }
         val imgCapture = findViewById<Button>(R.id.buttonPicture)
+        imgCapture.text = String(Character.toChars(0x1F4F7))
         imgCapture.setOnClickListener{
             val Intent = Intent(this, cameraActivity::class.java).apply {
                 putExtra("source", "messages")
@@ -137,6 +218,12 @@ class messages : AppCompatActivity() {
             }
             startActivity(Intent)
         }
+        val pickPicture = findViewById<Button>(R.id.buttonPictureSelect)
+        pickPicture.text = String(Character.toChars(0x1F5BC))
+        pickPicture.setOnClickListener {
+            loadImg.launch("image/*")
+            Log.e("pick button", "pickbuton pressed")
+        }
 
 
         //frag_home.addView(dynamicText)
@@ -144,12 +231,7 @@ class messages : AppCompatActivity() {
 
     }
 
-    private fun handleCameraImage(intent: Intent?) {
-        Log.d("PT", "photo taken")
-        val photo = intent?.extras?.get("data") as Bitmap
-        //saveMessage(type="BMP", input = photo)
 
-    }
 
     private fun buildMessage(
         sender:String = intent.getStringExtra("account").toString(),
@@ -271,38 +353,8 @@ class messages : AppCompatActivity() {
     }
 
 
-    fun imageChooser() {
 
-        // create an instance of the
-        // intent of the type image
-        val i = Intent()
-        i.type = "image/*"
-        i.action = Intent.ACTION_GET_CONTENT
 
-        // pass the constant to compare it
-        // with the returned requestCode
-        startActivityForResult(Intent.createChooser(i, "Select Picture"), 200)
-    }
-
-    // this function is triggered when user
-    // selects the image from the imageChooser
-    /*fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == RESULT_OK) {
-
-            // compare the resultCode with the
-            // SELECT_PICTURE constant
-            if (requestCode == 200) {
-                // Get the url of the image from data
-                val selectedImageUri: Uri? = data.data
-                if (null != selectedImageUri) {
-                    // update the preview image in the layout
-                    //IVPreviewImage.setImageURI(selectedImageUri)
-                }
-            }
-        }
-    }
-*/
 
     private fun setUpRecyclerView(realm: Realm, account:String) {
         // a recyclerview requires an adapter, which feeds it items to display.
