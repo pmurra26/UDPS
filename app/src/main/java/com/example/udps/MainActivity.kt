@@ -52,27 +52,9 @@ class MainActivity : AppCompatActivity() {
             RealmLog.warn(e)
         }
         if (user != null) {
-            // if no user is currently logged in, start the login activity so the user can authenticate
             val customUserData : Document? = user?.customData
             val accountType = customUserData?.get("accountType")
             val shortName = customUserData?.get("shortName")
-
-            //Log.v("EXAMPLE", "accountType: $test")
-            /*val mongoClient : MongoClient =
-                user?.getMongoClient("mongodb-atlas")!! // service for MongoDB Atlas cluster containing custom user data
-            val mongoDatabase : MongoDatabase =
-                mongoClient.getDatabase("YarmGwanga")!!
-            val mongoCollection : MongoCollection<Document> =
-                mongoDatabase.getCollection("YarmGwangaCustomData")!!
-            mongoCollection.insertOne(Document("ownerId", user!!.id).append("accountType", "teacher").append("_partition", "test"))
-                .getAsync { result ->
-                    if (result.isSuccess) {
-                        Log.v("EXAMPLE", "Inserted custom user data document. _id of inserted document: ${result.get().insertedId}")
-                    } else {
-                        Log.e("EXAMPLE", "Unable to insert custom user data. Error: ${result.error}")
-                    }
-                }*/
-
             if(accountType=="teacher") {
                 val intent = Intent(this, MainActivity2::class.java).apply {
                     putExtra("username", shortName.toString())
@@ -83,10 +65,25 @@ class MainActivity : AppCompatActivity() {
                     .show()
                 startActivity(intent)
             }else {
+                val accessCode:Int = customUserData?.get("access").toString().toInt()
+                var room = ""
+                if(accessCode<=8){
+                    when(accessCode){
+                        1->room="Bush Babies"
+                        2->room="Gumnut Toddlers"
+                        4->room="Kindy Koalas"
+                        8->room="Preschool Possums"
+                        else->{
+
+                        }
+                    }
+
+                }
+
                 val Intent = Intent(this, photoboardActivity::class.java).apply {
                     putExtra("username", shortName.toString())
                     putExtra("account", "parent")
-                    putExtra("recipient", "Red Wombats")
+                    putExtra("recipient", room)
                 }
 
                 Toast.makeText(this@MainActivity, "Welcome $username!", Toast.LENGTH_SHORT)

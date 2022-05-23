@@ -53,12 +53,6 @@ class messages : AppCompatActivity() {
 
     lateinit var test:SyncConfiguration
 
-        /*
-    RealmConfiguration.Builder().name("default3")
-        .schemaVersion(2)
-        .deleteRealmIfMigrationNeeded()
-        .build()
-*/
 
     var messageHistory = mutableListOf<Array<out Any>>(arrayOf("kerry", "10:50, 24/03", "test message from \"kerry\"", "text"),
         arrayOf("annie_mum", "10:52, 24/03", "test message from \"annie_mum\"", "text"),
@@ -197,15 +191,6 @@ class messages : AppCompatActivity() {
                 realm.insert(toInsert)
 
             }
-            /*mongoCollection?.insertOne(toInsert)?.getAsync { result ->
-                    if (result.isSuccess) {
-                        Log.v("EXAMPLE", "Inserted message document. _id of inserted document: ${result.get().insertedId}")
-                    } else {
-                        Log.e("EXAMPLE", "Unable to insert message. Error: ${result.error}")
-                    }
-                }*/
-            //buildMessage(content=inputTA.text)
-            //saveMessage(inputTA.text,"text")
             inputTA.text.clear()
         }
         val imgCapture = findViewById<Button>(R.id.buttonPicture)
@@ -230,130 +215,6 @@ class messages : AppCompatActivity() {
 
 
     }
-
-
-
-    private fun buildMessage(
-        sender:String = intent.getStringExtra("account").toString(),
-        dateTime:String = "now",
-        type:String = "text",
-        content:Any,
-        ) {
-        val messageSV = findViewById<LinearLayout>(R.id.ll_messages_scrolling)
-        val messageCL = LinearLayout(this)
-        val messageSpacer = LinearLayout(this)
-        val messageHT = LinearLayout(this)
-        val messageHL = LinearLayout(this)
-        val messageHD = LinearLayout(this)
-        val message4 = LinearLayout(this)
-        val senderL = TextView(this)
-        val timeRCVD = TextView(this)
-        val message = TextView(this)
-        val image = ImageView(this)
-
-        senderL.text = sender
-        timeRCVD.text = dateTime
-
-        senderL.layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-
-        timeRCVD.layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-
-        messageHT.layoutParams = RelativeLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-
-        val hlp = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT)
-        hlp.weight = 50F
-        messageHL.layoutParams = hlp
-        messageHD.layoutParams = hlp
-        messageHD.gravity = Gravity.RIGHT
-
-
-        messageSpacer.layoutParams = LinearLayout.LayoutParams(
-            0,
-            0
-        )
-
-        messageCL.layoutParams = LinearLayout.LayoutParams(
-            800,
-            ViewGroup.LayoutParams.MATCH_PARENT
-        )
-        messageCL.orientation = LinearLayout.VERTICAL
-
-        message4.layoutParams = RelativeLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-
-        messageHL.addView(senderL)
-        messageHD.addView(timeRCVD)
-        messageHT.addView(messageHL)
-        messageHT.addView(messageHD)
-        messageCL.addView(messageHT)
-
-        if (type == "text") {
-            message.text = content.toString()
-            message.layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            )
-            messageCL.addView(message)
-        } else if (type == "image") {
-            image.setImageResource(content as Int)
-            /*if(messageHistory[i][2]=="test_picture1.jpeg"){
-                val testarray = arrayOf(R.drawable.test_pic_01, "test")
-                image.setImageResource(R.drawable.test_pic_01)
-            }else {
-                image.setImageResource(R.drawable.test_pic_02)
-            }*/
-            image.layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            )
-            messageCL.addView(image)
-
-        } else {
-            image.setImageBitmap(content as Bitmap)
-            /*if(messageHistory[i][2]=="test_picture1.jpeg"){
-                val testarray = arrayOf(R.drawable.test_pic_01, "test")
-                image.setImageResource(R.drawable.test_pic_01)
-            }else {
-                image.setImageResource(R.drawable.test_pic_02)
-            }*/
-            image.layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            )
-            messageCL.addView(image)
-
-        }
-
-        if (intent.getStringExtra("account").toString() == sender) {
-            messageCL.setBackgroundResource(R.drawable.shape_sent)
-            val lp = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT)
-            lp.weight = 66f
-            val lp2 = LinearLayout.LayoutParams(0, 0)
-            lp2.weight = 33f
-            messageCL.layoutParams = lp
-            messageSpacer.layoutParams = lp2
-            message4.addView(messageSpacer)
-            message4.addView(messageCL)
-            messageSV.addView(message4)
-        } else {
-            messageCL.setBackgroundResource(R.drawable.shape_recieved)
-            //messageSV.addView(messageCL)
-        }
-    }
-
-
-
 
 
     private fun setUpRecyclerView(realm: Realm, account:String) {
