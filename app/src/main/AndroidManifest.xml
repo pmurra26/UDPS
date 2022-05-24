@@ -20,6 +20,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UDPS">
         <activity
+            android:name=".photoCommentActivity"
+            android:exported="false" />
+        <activity
             android:name=".photoboardPostActivity"
             android:exported="false" />
         <activity

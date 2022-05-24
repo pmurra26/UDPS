@@ -1,29 +1,22 @@
 package com.example.udps
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.ViewGroup
+import android.view.MotionEvent
 import android.widget.Button
-import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.view.setPadding
+import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
-import io.realm.log.RealmLog
-import io.realm.mongodb.Credentials
-import io.realm.mongodb.User
-import io.realm.mongodb.mongo.MongoClient
-import io.realm.mongodb.mongo.MongoCollection
-import io.realm.mongodb.mongo.MongoDatabase
+import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener
 import io.realm.Realm
-import io.realm.RealmConfiguration
 import io.realm.kotlin.where
+import io.realm.log.RealmLog
+import io.realm.mongodb.User
 import io.realm.mongodb.sync.SyncConfiguration
-import org.bson.Document
+
 
 class photoboardActivity : AppCompatActivity() {
     private lateinit var realm: Realm
@@ -33,6 +26,8 @@ class photoboardActivity : AppCompatActivity() {
     private lateinit var adapterR: PhotoboardRecyclerAdapterRightie
     private lateinit var recyclerViewL: RecyclerView
     private lateinit var recyclerViewR: RecyclerView
+    private var mTouchedRvTag: Int =0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -127,7 +122,12 @@ class photoboardActivity : AppCompatActivity() {
                 // since this realm should live exactly as long as this activity, assign the realm to a member variable
                 this@photoboardActivity.realm = realm
                 recyclerViewL = findViewById(R.id.photoboardRVLeftie)
+                recyclerViewL.tag=0
+                recyclerViewL.addOnItemTouchListener(your_touch_listener)
+                recyclerViewL.addOnScrollListener(your_scroll_listener)
+
                 setUpRecyclerViewLeftie(realm, recipient)
+
             }
         })
         Realm.getInstanceAsync(test, object: Realm.Callback() {
@@ -135,9 +135,14 @@ class photoboardActivity : AppCompatActivity() {
                 // since this realm should live exactly as long as this activity, assign the realm to a member variable
                 this@photoboardActivity.realm = realm
                 recyclerViewR = findViewById(R.id.photoboardRVRightie)
+                recyclerViewR.tag=1
+                recyclerViewR.addOnItemTouchListener(your_touch_listener)
+                recyclerViewR.addOnScrollListener(your_scroll_listener)
+
                 setUpRecyclerViewRightie(realm, recipient)
             }
         })
+
         if(accountT=="parent"){
             actionButton.text = String(Character.toChars(0x1F4E7))
             actionButton.setOnClickListener {
@@ -160,6 +165,37 @@ class photoboardActivity : AppCompatActivity() {
             }
         }
     }
+
+    private val your_touch_listener: OnItemTouchListener = object : OnItemTouchListener {
+        override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+            mTouchedRvTag = rv.tag as Int
+            return false
+        }
+
+        override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
+        override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
+    }
+
+    private val your_scroll_listener: RecyclerView.OnScrollListener =
+        object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (recyclerView.tag as Int == mTouchedRvTag) {
+                    for (noOfRecyclerView in 0..1) {
+                        if (noOfRecyclerView != recyclerView.tag as Int) {
+                            val tempRecyclerView =
+                                findViewById<ConstraintLayout>(R.id.photoboardParent).findViewWithTag(noOfRecyclerView) as RecyclerView
+                            tempRecyclerView.scrollBy(dx, dy)
+                        }
+                    }
+                }
+            }
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+            }
+        }
+
     private fun setUpRecyclerViewLeftie(realm: Realm, account:String) {
         // a recyclerview requires an adapter, which feeds it items to display.
         // Realm provides RealmRecyclerViewAdapter, which you can extend to customize for your application

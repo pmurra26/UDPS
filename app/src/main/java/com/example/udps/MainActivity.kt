@@ -121,10 +121,24 @@ class MainActivity : AppCompatActivity() {
                 .show()
             startActivity(intent)
         }else if(accountType=="parent") {
+            val accessCode:Int = customUserData?.get("access").toString().toInt()
+            var room = ""
+            if(accessCode<=8){
+                when(accessCode){
+                    1->room="Bush Babies"
+                    2->room="Gumnut Toddlers"
+                    4->room="Kindy Koalas"
+                    8->room="Preschool Possums"
+                    else->{
+
+                    }
+                }
+
+            }
             val Intent = Intent(this, photoboardActivity::class.java).apply {
                 putExtra("username", shortName.toString())
                 putExtra("account", accountType.toString())
-                putExtra("recipient", "Red Wombats")
+                putExtra("recipient", room)
             }
 
             Toast.makeText(this@MainActivity, "Welcome $shortName!", Toast.LENGTH_SHORT)
@@ -143,7 +157,7 @@ class MainActivity : AppCompatActivity() {
                         val result = task.get()
                         mongoCollection.insertOne(Document("ownerId", user!!.id).append("_partition", "test")
                             .append("shortName", result["shortName"]).append("accountType", result["accountType"])
-                            .append("children", result["children"]).append("active", "1")).getAsync { result ->
+                            .append("children", result["children"]).append("access", result["access"]).append("active", "1")).getAsync { result ->
                             if (result.isSuccess) {
                                 Log.v("EXAMPLE", "Inserted custom user data document. _id of inserted document: ${result.get().insertedId}")
                             } else {

@@ -3,14 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".createAccountFragment">
-
+    tools:context=".createAccountFragment"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="center"
-        >
+        android:gravity="center">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -50,39 +53,80 @@
                 android:text="parent"
                 android:id="@+id/radioParent"/>
         </RadioGroup>
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/childTop"
             android:visibility="gone">
-            <LinearLayout
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/childInner">
-                <TextView
+                android:text="Child information"
+                android:id="@+id/childInfoText"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/childname"/>
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="child name"
+                android:id="@+id/childname"
+                android:layout_marginHorizontal="10dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@id/childInfoText"
+                app:layout_constraintEnd_toEndOf="parent"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="class"
+                android:id="@+id/classText"
+                android:layout_marginVertical="5dp"
+                app:layout_constraintTop_toBottomOf="@id/childname"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/radioChild"
+                app:layout_constraintTop_toBottomOf="@id/classText"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+                <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Child information"/>
-                <EditText
+                    android:layout_weight="25"
+                    android:text="Bush Babies"
+                    android:id="@+id/radioBabies"
+                    android:checked="true"
+                    />
+                <RadioButton
+                    android:layout_weight="25"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="child name"
-                    android:id="@+id/childname"/>
-                <TextView
+                    android:text="Gumnut Toddlers"
+                    android:id="@+id/radioToddlers"/>
+                <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="class"/>
-                <Spinner
-                    android:id="@+id/spinClass"
+                    android:layout_weight="25"
+                    android:text="Kindy Koalas"
+                    android:id="@+id/radioKindy"/>
+                <RadioButton
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:layout_weight="25"
+                    android:text="Preschool Possums"
+                    android:id="@+id/radioPreschool"/>
+            </RadioGroup>
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="add child"
-                android:id="@+id/addChildBtn"/>
-        </LinearLayout>
+                android:id="@+id/addChildBtn"
+                app:layout_constraintTop_toBottomOf="@id/radioChild"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -96,4 +140,5 @@
 
 
     </LinearLayout>
+    </ScrollView>
 </FrameLayout>

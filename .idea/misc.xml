@@ -10,14 +10,17 @@
         <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/drawable/shape_recieved.xml" value="0.177" />
         <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/drawable/shape_sent.xml" value="0.177" />
         <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/layout/activity_camera.xml" value="0.1" />
+        <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/layout/activity_main.xml" value="0.10625" />
         <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/layout/activity_main2.xml" value="0.1" />
         <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/layout/activity_messages.xml" value="0.1" />
+        <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/layout/activity_photo_comment.xml" value="0.225" />
         <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/layout/activity_photoboard.xml" value="0.225" />
         <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/layout/activity_photoboard_comments.xml" value="0.225" />
         <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/layout/fragment_create_account.xml" value="0.25" />
         <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/layout/messageSent_cardview.xml" value="0.1" />
         <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/layout/message_received_cardview.xml" value="0.1094224924012158" />
         <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/layout/message_sent_cardview.xml" value="0.16458333333333333" />
+        <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/layout/photo_comment_cardview.xml" value="0.225" />
         <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/layout/photoboard_image_card.xml" value="0.21" />
         <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/layout/photoboard_imgview.xml" value="0.10677083333333333" />
         <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/xml/file_paths.xml" value="0.1" />

@@ -94,6 +94,11 @@ class createAccountFragment : Fragment() {
                 //login(false)
             }
         }
+        var access = 0
+        if(binding.radioBabies.isChecked)access = 1
+        if(binding.radioToddlers.isChecked)access = 2
+        if(binding.radioKindy.isChecked)access = 4
+        if(binding.radioPreschool.isChecked)access = 8
         var user = UDPSApp.currentUser()
         val mongoClient : MongoClient = user?.getMongoClient("mongodb-atlas")!! // service for MongoDB Atlas cluster containing custom user data
         val mongoDatabase : MongoDatabase = mongoClient.getDatabase("YarmGwanga")!!
@@ -102,7 +107,7 @@ class createAccountFragment : Fragment() {
         if (accountType==0){
             newUserDoc.append("accountType", "teacher")
         }else{
-            newUserDoc.append("accountType", "parent").append("children", binding.childname.text.toString())
+            newUserDoc.append("accountType", "parent").append("children", binding.childname.text.toString()).append("access", access)
         }
 
         mongoCollection.insertOne(newUserDoc)

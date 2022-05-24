@@ -161,22 +161,39 @@ class cameraActivity : AppCompatActivity() {
                             if (task.isSuccessful) {
                                 val downloadUri = task.result
                                 Log.e(TAG, "Photo capture succeded, url: ${downloadUri}")
-                                if(source=="messages") {
+                                if(source=="messages"||source=="comment") {
                                     val timeRaw = LocalDateTime.now()
                                     val formatter = DateTimeFormatter.ofPattern("dd-MM-yy HH:mm")
                                     val formatted = timeRaw.format(formatter)
-                                    var toInsert = messagesItem(
-                                        user!!.id,
-                                        user!!.customData!!.get("shortName")!!.toString(),
-                                        formatted,
-                                        "",
-                                        downloadUri.toString(),
-                                        account
-                                    )
-                                    realm.executeTransactionAsync { realm ->
-                                        realm.insert(toInsert)
+                                    if (source=="comment"){
+                                        var toInsert = photoCommentItem(
+                                            user!!.id,
+                                            user!!.customData!!.get("shortName")!!.toString(),
+                                            formatted,
+                                            "",
+                                            downloadUri.toString(),
+                                            account
+                                        )
+                                        realm.executeTransactionAsync { realm ->
+                                            realm.insert(toInsert)
 
+                                        }
+                                    }else {
+                                        var toInsert = messagesItem(
+                                            user!!.id,
+                                            user!!.customData!!.get("shortName")!!.toString(),
+                                            formatted,
+                                            "",
+                                            downloadUri.toString(),
+                                            account
+
+                                        )
+                                        realm.executeTransactionAsync { realm ->
+                                            realm.insert(toInsert)
+
+                                        }
                                     }
+
                                 }else if(source=="post"){
                                     val intent = Intent()
                                     intent.putExtra("url", downloadUri.toString())

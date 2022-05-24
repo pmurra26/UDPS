@@ -10,44 +10,26 @@ import android.os.Looper
 import android.util.Log
 import android.view.*
 import android.widget.*
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import io.realm.OrderedRealmCollection
 import io.realm.RealmRecyclerViewAdapter
 import java.util.concurrent.Executors
 
 
-internal class MessageRecyclerAdapter(data: OrderedRealmCollection<messagesItem>): RealmRecyclerViewAdapter<messagesItem, MessageRecyclerAdapter.ViewHolder?>(data, true) {
+internal class PhotoCommentRecyclerAdapter(data: OrderedRealmCollection<photoCommentItem>): RealmRecyclerViewAdapter<photoCommentItem, PhotoCommentRecyclerAdapter.ViewHolder?>(data, true) {
     lateinit var _parent:ViewGroup
-
-
-    override fun getItemViewType(position: Int): Int {
-        val item = getItem(position)
-        val user = UDPSApp.currentUser()
-        if(item?.sender==user?.id) return 1 //if you sent the message
-        else if (item?.sender!=user?.id&&user?.id==item?.conversation) return 2 //if you didnt send the message AND you are the parent
-        else if(item?.sender!=user?.id&&item?.sender==item?.conversation)return 2 //if you didnt send the message AND the parent sent the message
-        else if(item?.sender!=user?.id&&item?.sender!=item?.conversation)return 3 //if you didnt send the message AND the parent didnt send the message
-        else return 0
-
-        return super.getItemViewType(position)
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val user = UDPSApp.currentUser()
-        var v:View = when(viewType){
-            1-> LayoutInflater.from(parent.context).inflate(R.layout.message_sent_cardview, parent, false)
-            2-> LayoutInflater.from(parent.context).inflate(R.layout.message_received_cardview, parent, false)
-            3-> LayoutInflater.from(parent.context).inflate(R.layout.message_received2_cardview, parent, false)
-            else -> LayoutInflater.from(parent.context).inflate(R.layout.message_sent_cardview, parent, false)
-        }
+        var v:View =  LayoutInflater.from(parent.context).inflate(R.layout.photo_comment_cardview, parent, false)
+
         _parent = parent
         return ViewHolder(v)
     }
 
-    override fun onBindViewHolder(holder: MessageRecyclerAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: PhotoCommentRecyclerAdapter.ViewHolder, position: Int) {
         Log.e("bindviewholder position", "position: $position")
-        val obj:messagesItem? = getItem(position)
+        val obj:photoCommentItem? = getItem(position)
         holder.data = obj
         holder.senderTxt.text = obj?.senderSname
         holder.timeTxt.text = obj?.time
@@ -87,7 +69,7 @@ internal class MessageRecyclerAdapter(data: OrderedRealmCollection<messagesItem>
     }
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-        var data: messagesItem? = null
+        var data: photoCommentItem? = null
         var senderTxt: TextView
         var timeTxt: TextView
         var messageTxt: TextView
@@ -101,7 +83,5 @@ internal class MessageRecyclerAdapter(data: OrderedRealmCollection<messagesItem>
             sender = " "
         }
     }
-
-
 
 }
