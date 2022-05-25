@@ -93,7 +93,7 @@ class MainActivity2 : AppCompatActivity() {
 
         val llHome = findViewById<LinearLayout>(R.id.ll_home)
 
-        val classNames = arrayOf("red wombats", "yellow porcupines", "gold giraffes", "blue beetles")
+        val classNames = arrayOf("Bush Babies", "Gumnut Toddlers", "Kindy Koalas", "Preschool Possums")
         var activeUserId = mutableListOf<String>()
         var activeUserSname = mutableListOf<String>()
 

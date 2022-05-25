@@ -1,38 +1,44 @@
 package com.example.udps
 
 import android.app.Activity
+import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import android.os.Message
 import android.provider.MediaStore
 import android.util.Log
 import android.view.Gravity
+import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.recyclerview.widget.RecyclerView
+import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.udps.MessageRecyclerAdapter
-import com.example.udps.messagesItem
+import androidx.recyclerview.widget.RecyclerView
 import io.realm.Realm
 import io.realm.RealmConfiguration
+
 import io.realm.kotlin.where
 import io.realm.mongodb.User
 import io.realm.mongodb.mongo.MongoClient
 import io.realm.mongodb.mongo.MongoCollection
 import io.realm.mongodb.mongo.MongoDatabase
-import org.bson.Document
-import org.bson.types.ObjectId
+import io.realm.mongodb.sync.SyncConfiguration
 
+import org.bson.Document
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class messages : AppCompatActivity() {
@@ -41,6 +47,11 @@ class messages : AppCompatActivity() {
     private lateinit var adapter: MessageRecyclerAdapter
     private lateinit var realm: Realm
     private lateinit var recyclerView: RecyclerView
+    lateinit var account:String
+
+    lateinit var storage: FirebaseStorage
+
+    lateinit var test:SyncConfiguration
 
 
     var messageHistory = mutableListOf<Array<out Any>>(arrayOf("kerry", "10:50, 24/03", "test message from \"kerry\"", "text"),
@@ -48,6 +59,54 @@ class messages : AppCompatActivity() {
         arrayOf("kerry", "10:50, 24/03", R.drawable.test_pic_01, "image"),
         arrayOf("annie_mum", "10:52, 24/03", R.drawable.test_pic_02, "image"))
 
+    val loadImg = registerForActivityResult(ActivityResultContracts.GetContent(),
+        ActivityResultCallback {
+            if (it!=null) {
+                storage = Firebase.storage
+                val name = user?.customData?.get("shortName").toString()+ SimpleDateFormat(
+                    cameraActivity.FILENAME_FORMAT, Locale.US)
+                    .format(System.currentTimeMillis())
+                val contentValues = ContentValues().apply {
+                    put(MediaStore.MediaColumns.DISPLAY_NAME, name)
+                    put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+                    if(Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+                        put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/UDPS-image")
+                    }
+                }
+                var storageRef = storage.reference
+                var file = it
+                val photoRef = storageRef.child("images/${file.lastPathSegment}")
+                val uploadTask = photoRef.putFile(file)
+                val urlTask = uploadTask.continueWithTask { task ->
+                    if (!task.isSuccessful) {
+                        task.exception?.let {
+                            throw it
+                        }
+                    }
+                    photoRef.downloadUrl
+                }.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val downloadUri = task.result
+                        Log.e("message from gallery", "Photo upload succeded, url: ${downloadUri}")
+
+                        val timeRaw = LocalDateTime.now()
+                        val formatter = DateTimeFormatter.ofPattern("dd-MM-yy HH:mm")
+                        val formatted = timeRaw.format(formatter)
+                        var toInsert = messagesItem(
+                            user!!.id,
+                            user!!.customData!!.get("shortName")!!.toString(),
+                            formatted,
+                            "",
+                            downloadUri.toString(),
+                            account
+                        )
+                        realm.executeTransactionAsync { realm ->
+                            realm.insert(toInsert)
+                        }
+                    }
+                }
+            }
+        })
 
     //override fun onStart() {
       //  super.onStart()
@@ -58,22 +117,37 @@ class messages : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_messages)
         println(savedInstanceState==null)
+        val pickPicture = findViewById<Button>(R.id.buttonPictureSelect)
+        pickPicture.setOnClickListener {
+            loadImg.launch("image/*")
+            Log.e("pick button", "pickbuton pressed")
+        }
 
-        resultLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == Activity.RESULT_OK) {
-                    handleCameraImage(result.data)
-                }
+        user = UDPSApp.currentUser()
+        test = SyncConfiguration.Builder(user!!, "test")
+            .waitForInitialRemoteData()
+            .build()
+
+        Realm.setDefaultConfiguration(test)
+        Realm.getInstanceAsync(test, object: Realm.Callback() {
+            override fun onSuccess(realm: Realm) {
+                // since this realm should live exactly as long as this activity, assign the realm to a member variable
+                this@messages.realm = realm
+                //setUpRecyclerView(realm)
             }
+        })
+
 
     }
+
+
     override fun onResume(){
         super.onResume()
         setContentView(R.layout.activity_messages)
 
         val recipient:String = intent.getStringExtra("recipient").toString()//recipient shortname
         val type:String =intent.getStringExtra("type").toString()
-        val account:String = intent.getStringExtra("account").toString()//recipient id
+        account = intent.getStringExtra("account").toString()//recipient id
         val txtHeader = findViewById<TextView>(R.id.textHeader)
         when(type){
             "direct_t"->txtHeader.text = "$recipient's parents"
@@ -82,10 +156,11 @@ class messages : AppCompatActivity() {
             else ->txtHeader.text = "something has gone terribly wrong. type = $type , recipient =  $recipient"
         }
 
-        val test = RealmConfiguration.Builder().name("default3")
-            .schemaVersion(2)
-            .deleteRealmIfMigrationNeeded()
+        user = UDPSApp.currentUser()
+        test = SyncConfiguration.Builder(user!!, "test")
+            .waitForInitialRemoteData()
             .build()
+
         Realm.getInstanceAsync(test, object: Realm.Callback() {
             override fun onSuccess(realm: Realm) {
                 // since this realm should live exactly as long as this activity, assign the realm to a member variable
@@ -95,10 +170,7 @@ class messages : AppCompatActivity() {
             }
         })
 
-        //for(i in messageHistory.indices){
-            //buildMessage(messageHistory[i][0] as String, messageHistory[i][1]  as String,messageHistory[i][3]  as String,messageHistory[i][2] )
-        //}
-        user = UDPSApp.currentUser()
+
 
 
 
@@ -113,159 +185,35 @@ class messages : AppCompatActivity() {
             val timeRaw = LocalDateTime.now()
             val formatter = DateTimeFormatter.ofPattern("dd-MM-yy HH:mm")
             val formatted = timeRaw.format(formatter)
-            var toInsert = messagesItem(user?.id,
-                user?.customData?.get("shortName")?.toString(), formatted, inputTA.text.toString(), account)
+            var toInsert = messagesItem(user!!.id,
+                user!!.customData!!.get("shortName")!!.toString(), formatted, inputTA.text.toString(), "", account)
             realm.executeTransactionAsync { realm ->
                 realm.insert(toInsert)
 
             }
-            /*mongoCollection?.insertOne(toInsert)?.getAsync { result ->
-                    if (result.isSuccess) {
-                        Log.v("EXAMPLE", "Inserted message document. _id of inserted document: ${result.get().insertedId}")
-                    } else {
-                        Log.e("EXAMPLE", "Unable to insert message. Error: ${result.error}")
-                    }
-                }*/
-            //buildMessage(content=inputTA.text)
-            //saveMessage(inputTA.text,"text")
             inputTA.text.clear()
         }
         val imgCapture = findViewById<Button>(R.id.buttonPicture)
+        imgCapture.text = String(Character.toChars(0x1F4F7))
         imgCapture.setOnClickListener{
-            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            resultLauncher.launch(intent)
+            val Intent = Intent(this, cameraActivity::class.java).apply {
+                putExtra("source", "messages")
+                putExtra("account", account)
+                //putExtra("account", account)
+            }
+            startActivity(Intent)
+        }
+        val pickPicture = findViewById<Button>(R.id.buttonPictureSelect)
+        pickPicture.text = String(Character.toChars(0x1F5BC))
+        pickPicture.setOnClickListener {
+            loadImg.launch("image/*")
+            Log.e("pick button", "pickbuton pressed")
         }
 
 
         //frag_home.addView(dynamicText)
 
 
-    }
-
-    private fun handleCameraImage(intent: Intent?) {
-        Log.d("PT", "photo taken")
-        val photo = intent?.extras?.get("data") as Bitmap
-        //saveMessage(type="BMP", input = photo)
-
-    }
-
-    private fun buildMessage(
-        sender:String = intent.getStringExtra("account").toString(),
-        dateTime:String = "now",
-        type:String = "text",
-        content:Any,
-        ) {
-        val messageSV = findViewById<LinearLayout>(R.id.ll_messages_scrolling)
-        val messageCL = LinearLayout(this)
-        val messageSpacer = LinearLayout(this)
-        val messageHT= LinearLayout(this)
-        val messageHL= LinearLayout(this)
-        val messageHD= LinearLayout(this)
-        val message4 = LinearLayout(this)
-        val senderL = TextView(this)
-        val timeRCVD = TextView(this)
-        val message = TextView(this)
-        val image = ImageView(this)
-
-        senderL.text = sender
-        timeRCVD.text = dateTime
-
-        senderL.layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-
-        timeRCVD.layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-
-        messageHT.layoutParams = RelativeLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-
-        val hlp = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT)
-        hlp.weight = 50F
-        messageHL.layoutParams = hlp
-        messageHD.layoutParams = hlp
-        messageHD.gravity =Gravity.RIGHT
-
-
-        messageSpacer.layoutParams = LinearLayout.LayoutParams(
-            0,
-            0
-        )
-
-        messageCL.layoutParams = LinearLayout.LayoutParams(
-            800,
-            ViewGroup.LayoutParams.MATCH_PARENT
-        )
-        messageCL.orientation = LinearLayout.VERTICAL
-
-        message4.layoutParams = RelativeLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-
-        messageHL.addView(senderL)
-        messageHD.addView(timeRCVD)
-        messageHT.addView(messageHL)
-        messageHT.addView(messageHD)
-        messageCL.addView(messageHT)
-
-        if (type=="text"){
-            message.text = content.toString()
-            message.layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            )
-            messageCL.addView(message)
-        } else if(type == "image"){
-            image.setImageResource(content as Int)
-            /*if(messageHistory[i][2]=="test_picture1.jpeg"){
-                val testarray = arrayOf(R.drawable.test_pic_01, "test")
-                image.setImageResource(R.drawable.test_pic_01)
-            }else {
-                image.setImageResource(R.drawable.test_pic_02)
-            }*/
-            image.layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            )
-            messageCL.addView(image)
-
-        }else{
-            image.setImageBitmap(content as Bitmap)
-            /*if(messageHistory[i][2]=="test_picture1.jpeg"){
-                val testarray = arrayOf(R.drawable.test_pic_01, "test")
-                image.setImageResource(R.drawable.test_pic_01)
-            }else {
-                image.setImageResource(R.drawable.test_pic_02)
-            }*/
-            image.layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            )
-            messageCL.addView(image)
-
-        }
-
-        if(intent.getStringExtra("account").toString()==sender){
-            messageCL.setBackgroundResource(R.drawable.shape_sent)
-            val lp = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT)
-            lp.weight = 66f
-            val lp2 = LinearLayout.LayoutParams(0, 0)
-            lp2.weight = 33f
-            messageCL.layoutParams = lp
-            messageSpacer.layoutParams=lp2
-            message4.addView(messageSpacer)
-            message4.addView(messageCL)
-            messageSV.addView(message4)
-        } else {
-            messageCL.setBackgroundResource(R.drawable.shape_recieved)
-            //messageSV.addView(messageCL)
-        }
     }
 
 

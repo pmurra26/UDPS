@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".photoboardActivity">
+    tools:context=".photoboardActivity"
+    android:id="@+id/photoboardParent">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/PB_header"
         android:layout_width="match_parent"
@@ -42,7 +43,26 @@
             app:layout_constraintEnd_toEndOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-    <ScrollView
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/photoboardRVLeftie"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@null"
+        app:layout_constraintTop_toBottomOf="@id/PB_header"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/photoboardRVRightie"
+        app:layout_constraintStart_toStartOf="parent" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/photoboardRVRightie"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@null"
+        app:layout_constraintTop_toBottomOf="@id/PB_header"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/photoboardRVLeftie" />
+    <!--<ScrollView
         android:id="@+id/photoboardSV"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -68,5 +88,5 @@
                 android:layout_weight="50"
                 android:orientation="vertical"/>
         </LinearLayout>
-    </ScrollView>
+    </ScrollView>-->
 </androidx.constraintlayout.widget.ConstraintLayout>
