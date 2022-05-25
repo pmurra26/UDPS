@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_color"
     tools:context=".MainActivity2">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -30,14 +31,17 @@
             android:text="Header"
             android:textSize="30dp"
             app:layout_constraintStart_toEndOf="@id/head_image"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:textColor="@color/primary_text_color"/>
+
         <Button
             android:id="@+id/homeHeaderButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
+            android:backgroundTint="@color/secondary_color"
+            android:text="account management"
             app:layout_constraintEnd_toEndOf="parent"
-            android:text="account management"/>
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
     <ScrollView
         android:layout_width="match_parent"
@@ -53,6 +57,72 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/classesTitle"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                app:cardBackgroundColor="@color/background_color">
+
+
+                <View
+                    android:id="@+id/divider"
+                    style="@style/Widget.Material3.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_gravity="top"
+                    android:background="@color/secondary_color" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Class Photoboard"
+                    android:textColor="@color/primary_text_color"
+                    android:textSize="20sp" />
+
+                <View
+                    android:id="@+id/divider2"
+                    style="@style/Widget.Material3.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_gravity="bottom"
+                    android:background="@color/secondary_color" />
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/messageTitle"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                app:cardBackgroundColor="@color/background_color">
+
+                <View
+                    android:id="@+id/divider3"
+                    style="@style/Widget.Material3.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/secondary_color" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Messages"
+                    android:textColor="@color/primary_text_color"
+                    android:textSize="20sp" />
+
+                <View
+                    android:id="@+id/divider4"
+                    style="@style/Widget.Material3.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_gravity="bottom"
+                    android:background="@color/secondary_color" />
+
+            </androidx.cardview.widget.CardView>
 
         </LinearLayout>
     </ScrollView>

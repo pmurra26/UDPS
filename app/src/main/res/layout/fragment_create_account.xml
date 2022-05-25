@@ -6,140 +6,196 @@
     tools:context=".createAccountFragment"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Parent information"/>
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="parent name"
-            android:id="@+id/parentShortName"/>
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="parent email"
-            android:id="@+id/parentEmail"/>
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="password"
-            android:inputType="textPassword"
-            android:id="@+id/parentPassword"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="account type"/>
-        <RadioGroup
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="teacher"
-                android:id="@+id/radioTeacher"
-                android:checked="true"
-                />
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="parent"
-                android:id="@+id/radioParent"/>
-        </RadioGroup>
-        <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_height="wrap_content"
+        android:background="@color/background_color"
+        android:paddingTop="20dp">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/childTop"
-            android:visibility="gone">
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Child information"
-                android:id="@+id/childInfoText"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/childname"/>
+                android:text="Parent information"
+                android:textColor="@color/primary_text_color" />
+
             <EditText
-                android:layout_width="0dp"
+                android:id="@+id/parentShortName"
+                android:layout_width="180dp"
                 android:layout_height="wrap_content"
-                android:hint="child name"
-                android:id="@+id/childname"
-                android:layout_marginHorizontal="10dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toEndOf="@id/childInfoText"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                android:backgroundTint="@color/secondary_color"
+                android:hint="Parent name"
+                android:textColor="@color/primary_text_color"
+                android:textColorHint="#D1D1D1" />
+
+            <EditText
+                android:id="@+id/parentEmail"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/secondary_color"
+                android:hint="Parent email"
+                android:textColor="@color/primary_text_color"
+                android:textColorHint="#D1D1D1" />
+
+            <EditText
+                android:id="@+id/parentPassword"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/secondary_color"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:textColor="@color/primary_text_color"
+                android:textColorHint="#D1D1D1" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="class"
-                android:id="@+id/classText"
-                android:layout_marginVertical="5dp"
-                app:layout_constraintTop_toBottomOf="@id/childname"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                android:text="account type"
+                android:textColor="@color/primary_text_color" />
+
             <RadioGroup
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/radioChild"
-                app:layout_constraintTop_toBottomOf="@id/classText"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                android:layout_height="wrap_content">
+
                 <RadioButton
+                    android:id="@+id/radioTeacher"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="25"
-                    android:text="Bush Babies"
-                    android:id="@+id/radioBabies"
+                    android:buttonTint="@color/secondary_color"
                     android:checked="true"
-                    />
+                    android:text="teacher"
+                    android:textColor="@color/primary_text_color" />
+
                 <RadioButton
-                    android:layout_weight="25"
+                    android:id="@+id/radioParent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Gumnut Toddlers"
-                    android:id="@+id/radioToddlers"/>
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="25"
-                    android:text="Kindy Koalas"
-                    android:id="@+id/radioKindy"/>
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="25"
-                    android:text="Preschool Possums"
-                    android:id="@+id/radioPreschool"/>
+                    android:buttonTint="@color/secondary_color"
+                    android:text="parent"
+                    android:textColor="@color/primary_text_color" />
             </RadioGroup>
-            <Button
-                android:layout_width="wrap_content"
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/childTop"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="add child"
-                android:id="@+id/addChildBtn"
-                app:layout_constraintTop_toBottomOf="@id/radioChild"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="create account"
-            android:id="@+id/saveBtn"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="clear fields"
-            android:id="@+id/clearBtn"/>
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/childInfoText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Child information:"
+                    android:textColor="@color/primary_text_color"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <EditText
+                    android:id="@+id/childname"
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="20dp"
+                    android:backgroundTint="@color/secondary_color"
+                    android:hint="Child's name"
+                    android:textColor="@color/primary_text_color"
+                    android:textColorHint="#E6E6E6"
+                    app:layout_constraintBottom_toTopOf="@id/classText"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/childInfoText" />
+
+                <TextView
+                    android:id="@+id/classText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="5dp"
+                    android:layout_marginTop="20dp"
+                    android:text="Class:"
+                    android:textColor="@color/primary_text_color"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/childname" />
+
+                <RadioGroup
+                    android:id="@+id/radioChild"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/classText">
+
+                    <RadioButton
+                        android:id="@+id/radioBabies"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="25"
+                        android:buttonTint="@color/secondary_color"
+                        android:checked="true"
+                        android:text="Bush Babies"
+                        android:textColor="@color/primary_text_color" />
+
+                    <RadioButton
+                        android:id="@+id/radioToddlers"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="25"
+                        android:buttonTint="@color/secondary_color"
+                        android:text="Gumnut Toddlers"
+                        android:textColor="@color/primary_text_color" />
+
+                    <RadioButton
+                        android:id="@+id/radioKindy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="25"
+                        android:buttonTint="@color/secondary_color"
+                        android:text="Kindy Koalas"
+                        android:textColor="@color/primary_text_color" />
+
+                    <RadioButton
+                        android:id="@+id/radioPreschool"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="25"
+                        android:buttonTint="@color/secondary_color"
+                        android:text="Preschool Possums"
+                        android:textColor="@color/primary_text_color" />
+                </RadioGroup>
+
+                <Button
+                    android:id="@+id/addChildBtn"
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/secondary_color"
+                    android:text="add child"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/radioChild" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <Button
+                android:id="@+id/saveBtn"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/secondary_color"
+                android:text="create account" />
+
+            <Button
+                android:id="@+id/clearBtn"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/secondary_color"
+                android:text="clear fields" />
 
 
-    </LinearLayout>
+        </LinearLayout>
     </ScrollView>
 </FrameLayout>

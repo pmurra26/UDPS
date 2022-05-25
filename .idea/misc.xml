@@ -3,46 +3,43 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.177" />
-        <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.177" />
-        <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.177" />
-        <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/drawable/shape.xml" value="0.177" />
-        <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/drawable/shape_recieved.xml" value="0.177" />
-        <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/drawable/shape_sent.xml" value="0.177" />
-        <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/layout/activity_camera.xml" value="0.1" />
-        <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/layout/activity_main.xml" value="0.10625" />
-        <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/layout/activity_main2.xml" value="0.1" />
-        <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/layout/activity_messages.xml" value="0.1" />
-        <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/layout/activity_photo_comment.xml" value="0.225" />
-        <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/layout/activity_photoboard.xml" value="0.225" />
-        <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/layout/activity_photoboard_comments.xml" value="0.225" />
-        <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/layout/fragment_create_account.xml" value="0.25" />
-        <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/layout/messageSent_cardview.xml" value="0.1" />
-        <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/layout/message_received_cardview.xml" value="0.1094224924012158" />
-        <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/layout/message_sent_cardview.xml" value="0.16458333333333333" />
-        <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/layout/photo_comment_cardview.xml" value="0.225" />
-        <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/layout/photoboard_image_card.xml" value="0.21" />
-        <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/layout/photoboard_imgview.xml" value="0.10677083333333333" />
-        <entry key="..\:/Users/User/StudioProjects/UDPS/app/src/main/res/xml/file_paths.xml" value="0.1" />
-        <entry key="..\:/Users/denise/StudioProjects/UDPS/app/src/main/res/layout/activity_messages.xml" value="0.13269927536231885" />
+        <entry key="..\:/Users/Patrick/Documents/SCHOOL/2022 SEM 1/COSC320 - IT Project/UDPS/app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.254" />
+        <entry key="..\:/Users/Patrick/Documents/SCHOOL/2022 SEM 1/COSC320 - IT Project/UDPS/app/src/main/res/drawable/ic_launcher_background.xml" value="0.254" />
+        <entry key="..\:/Users/Patrick/Documents/SCHOOL/2022 SEM 1/COSC320 - IT Project/UDPS/app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.254" />
+        <entry key="..\:/Users/Patrick/Documents/SCHOOL/2022 SEM 1/COSC320 - IT Project/UDPS/app/src/main/res/drawable/roundButton.xml" value="0.254" />
+        <entry key="..\:/Users/Patrick/Documents/SCHOOL/2022 SEM 1/COSC320 - IT Project/UDPS/app/src/main/res/drawable/round_button.xml" value="0.2705" />
+        <entry key="..\:/Users/Patrick/Documents/SCHOOL/2022 SEM 1/COSC320 - IT Project/UDPS/app/src/main/res/drawable/round_button_clicked.xml" value="0.1965" />
+        <entry key="..\:/Users/Patrick/Documents/SCHOOL/2022 SEM 1/COSC320 - IT Project/UDPS/app/src/main/res/drawable/shape.xml" value="0.2705" />
+        <entry key="..\:/Users/Patrick/Documents/SCHOOL/2022 SEM 1/COSC320 - IT Project/UDPS/app/src/main/res/drawable/shape_recieved.xml" value="0.254" />
+        <entry key="..\:/Users/Patrick/Documents/SCHOOL/2022 SEM 1/COSC320 - IT Project/UDPS/app/src/main/res/drawable/shape_sent.xml" value="0.271" />
+        <entry key="..\:/Users/Patrick/Documents/SCHOOL/2022 SEM 1/COSC320 - IT Project/UDPS/app/src/main/res/layout/activity_account_management.xml" value="0.2484375" />
+        <entry key="..\:/Users/Patrick/Documents/SCHOOL/2022 SEM 1/COSC320 - IT Project/UDPS/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/Users/Patrick/Documents/SCHOOL/2022 SEM 1/COSC320 - IT Project/UDPS/app/src/main/res/layout/activity_main2.xml" value="0.2" />
+        <entry key="..\:/Users/Patrick/Documents/SCHOOL/2022 SEM 1/COSC320 - IT Project/UDPS/app/src/main/res/layout/activity_messages.xml" value="0.18854166666666666" />
+        <entry key="..\:/Users/Patrick/Documents/SCHOOL/2022 SEM 1/COSC320 - IT Project/UDPS/app/src/main/res/layout/activity_photo_comment.xml" value="0.21846943138093203" />
+        <entry key="..\:/Users/Patrick/Documents/SCHOOL/2022 SEM 1/COSC320 - IT Project/UDPS/app/src/main/res/layout/activity_photoboard.xml" value="0.2484375" />
+        <entry key="..\:/Users/Patrick/Documents/SCHOOL/2022 SEM 1/COSC320 - IT Project/UDPS/app/src/main/res/layout/activity_photoboard_comments.xml" value="0.18802083333333333" />
+        <entry key="..\:/Users/Patrick/Documents/SCHOOL/2022 SEM 1/COSC320 - IT Project/UDPS/app/src/main/res/layout/activity_photoboard_post.xml" value="0.21846943138093203" />
+        <entry key="..\:/Users/Patrick/Documents/SCHOOL/2022 SEM 1/COSC320 - IT Project/UDPS/app/src/main/res/layout/fragment_account_management.xml" value="0.18802083333333333" />
+        <entry key="..\:/Users/Patrick/Documents/SCHOOL/2022 SEM 1/COSC320 - IT Project/UDPS/app/src/main/res/layout/fragment_create_account.xml" value="0.22" />
+        <entry key="..\:/Users/Patrick/Documents/SCHOOL/2022 SEM 1/COSC320 - IT Project/UDPS/app/src/main/res/layout/fragment_edit_account.xml" value="0.21846943138093203" />
+        <entry key="..\:/Users/Patrick/Documents/SCHOOL/2022 SEM 1/COSC320 - IT Project/UDPS/app/src/main/res/layout/fragment_header.xml" value="0.18854166666666666" />
+        <entry key="..\:/Users/Patrick/Documents/SCHOOL/2022 SEM 1/COSC320 - IT Project/UDPS/app/src/main/res/layout/fragment_messages_input.xml" value="0.18854166666666666" />
+        <entry key="..\:/Users/Patrick/Documents/SCHOOL/2022 SEM 1/COSC320 - IT Project/UDPS/app/src/main/res/layout/fragment_scrolling_messages.xml" value="0.18854166666666666" />
+        <entry key="..\:/Users/Patrick/Documents/SCHOOL/2022 SEM 1/COSC320 - IT Project/UDPS/app/src/main/res/layout/message_received2_cardview.xml" value="0.21846943138093203" />
+        <entry key="..\:/Users/Patrick/Documents/SCHOOL/2022 SEM 1/COSC320 - IT Project/UDPS/app/src/main/res/layout/message_received_cardview.xml" value="0.21846943138093203" />
+        <entry key="..\:/Users/Patrick/Documents/SCHOOL/2022 SEM 1/COSC320 - IT Project/UDPS/app/src/main/res/layout/message_sent_cardview.xml" value="0.21846943138093203" />
+        <entry key="..\:/Users/Patrick/Documents/SCHOOL/2022 SEM 1/COSC320 - IT Project/UDPS/app/src/main/res/layout/photo_comment_cardview.xml" value="0.21846943138093203" />
+        <entry key="..\:/Users/Patrick/Documents/SCHOOL/2022 SEM 1/COSC320 - IT Project/UDPS/app/src/main/res/layout/photoboard_image_card.xml" value="0.21846943138093203" />
+        <entry key="..\:/Users/Patrick/Documents/SCHOOL/2022 SEM 1/COSC320 - IT Project/UDPS/app/src/main/res/menu/bottom_nav_menu.xml" value="0.2484375" />
         <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/drawable/shape.xml" value="0.195" />
         <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/drawable/shapeRecieved.xml" value="0.14" />
         <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/drawable/shapeSent.xml" value="0.14" />
-        <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/activity_account_management.xml" value="0.358695652173913" />
         <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/activity_main2.xml" value="0.1661600810536981" />
         <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/activity_messages.xml" value="0.2" />
-        <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/activity_photoboard.xml" value="0.358695652173913" />
-        <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/activity_photoboard_comments.xml" value="0.358695652173913" />
-        <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/content_scrolling.xml" value="0.358695652173913" />
-        <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/fragment_account_management.xml" value="0.358695652173913" />
-        <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/fragment_create_account.xml" value="0.14722222222222223" />
-        <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/fragment_dashboard.xml" value="0.358695652173913" />
-        <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/fragment_edit_account.xml" value="0.14722222222222223" />
         <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/fragment_header.xml" value="0.18697916666666667" />
-        <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/fragment_home.xml" value="0.358695652173913" />
         <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/fragment_messages_input.xml" value="0.33" />
-        <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/fragment_notifications.xml" value="0.358695652173913" />
         <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/fragment_scrolling_messages.xml" value="0.18697916666666667" />
         <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/main_fragment.xml" value="0.14" />
         <entry key="..\:/Users/muir/AndroidStudioProjects/UDPS/app/src/main/res/layout/messages2_activity.xml" value="0.1" />

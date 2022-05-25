@@ -4,27 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_color"
     tools:context=".messages">
+
     <LinearLayout
         android:id="@+id/ll_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toTopOf="parent">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/shape"
-            android:textColor="#ffffff"
-            android:text=" " />
+            android:text=" "
+            android:textColor="#ffffff" />
+
         <TextView
-            android:layout_height="wrap_content"
+            android:id="@+id/textHeader"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="Header"
-            android:textSize="30dp"
-            android:id="@+id/textHeader"/>
+            android:textColor="@color/primary_text_color"
+            android:textSize="30dp" />
     </LinearLayout>
 
     <!--<ScrollView
@@ -47,30 +52,34 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@null"
-        app:layout_constraintTop_toBottomOf="@id/ll_header"
         app:layout_constraintBottom_toTopOf="@id/ll_input"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_header" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:orientation="vertical"
         android:id="@+id/ll_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
 
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
         <Button
             android:id="@+id/buttonPicture"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/secondary_color"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
         <Button
             android:id="@+id/buttonPictureSelect"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/secondary_color"
             android:text=""
             app:layout_constraintStart_toEndOf="@id/buttonPicture"
             app:layout_constraintTop_toTopOf="parent" />
@@ -79,16 +88,21 @@
             android:id="@+id/TAmessageInput"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/secondary_color"
             android:hint="type your message here"
+            android:textColor="@color/primary_text_color"
+            android:textColorHint="#C5C5C5"
             app:layout_constraintEnd_toStartOf="@id/buttonSend"
             app:layout_constraintStart_toEndOf="@+id/buttonPictureSelect"
             app:layout_constraintTop_toTopOf="parent" />
+
         <Button
             android:id="@+id/buttonSend"
-            android:layout_width="40dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=">"
+            android:backgroundTint="@color/secondary_color"
+            android:text="Send"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

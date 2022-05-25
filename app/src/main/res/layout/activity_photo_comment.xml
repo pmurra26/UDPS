@@ -4,69 +4,73 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_color"
     tools:context=".photoCommentActivity">
+
     <TextView
+        android:id="@+id/photoCommentSname"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:id="@+id/photoCommentSname"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/photoCommentTitle"
         app:layout_constraintEnd_toStartOf="@+id/photoCommentDate"
         app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
+        android:id="@+id/photoCommentDate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:id="@+id/photoCommentDate"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/photoCommentTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/photoCommentSname"
-    />
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
+        android:id="@+id/photoCommentTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/photoCommentTitle"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/photoCommentImg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
+        android:id="@+id/photoCommentImg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/photoCommentImg"
         android:adjustViewBounds="true"
         android:clickable="true"
-        app:layout_constraintTop_toBottomOf="@id/photoCommentTitle"
         app:layout_constraintBottom_toTopOf="@id/photoCommentRV"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintTop_toBottomOf="@id/photoCommentTitle" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/photoCommentRV"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@null"
-        app:layout_constraintTop_toBottomOf="@id/photoCommentImg"
         app:layout_constraintBottom_toTopOf="@id/pc_input"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/photoCommentImg" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:orientation="vertical"
         android:id="@+id/pc_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
         <Button
             android:id="@+id/buttonCamera"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
         <Button
             android:id="@+id/buttonGallery"
             android:layout_width="40dp"
@@ -83,6 +87,7 @@
             app:layout_constraintEnd_toStartOf="@id/buttonSend"
             app:layout_constraintStart_toEndOf="@+id/buttonGallery"
             app:layout_constraintTop_toTopOf="parent" />
+
         <Button
             android:id="@+id/buttonSend"
             android:layout_width="40dp"

@@ -9,7 +9,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-
+import androidx.cardview.widget.CardView
 
 
 import io.realm.log.RealmLog
@@ -92,6 +92,7 @@ class MainActivity2 : AppCompatActivity() {
         ))
 
         val llHome = findViewById<LinearLayout>(R.id.ll_home)
+        val messageTitle = findViewById<CardView>(R.id.messageTitle)
 
         val classNames = arrayOf("Bush Babies", "Gumnut Toddlers", "Kindy Koalas", "Preschool Possums")
         var activeUserId = mutableListOf<String>()
@@ -125,8 +126,20 @@ class MainActivity2 : AppCompatActivity() {
                             LinearLayout.LayoutParams.MATCH_PARENT,
                             ViewGroup.LayoutParams.WRAP_CONTENT
                         )
+                        /**
+                         *  Each class photoboard button aesthetics
+                         */
+                        val param = button_dynamic.layoutParams as ViewGroup.MarginLayoutParams
+                        param.setMargins(10,10,10,10)
+                        button_dynamic.layoutParams = param
+                        button_dynamic.setBackgroundResource(R.drawable.round_button)
+                        button_dynamic.setTextColor(getResources().getColor(R.color.primary_text_color))
+
                         button_dynamic.text = classNames[i]
                         button_dynamic.setOnClickListener{
+                            // On click button shape
+                            button_dynamic.setBackgroundResource(R.drawable.round_button_clicked)
+
                             val Intent = Intent(this, photoboardActivity::class.java).apply {
                                 putExtra("recipient", classNames[i])
                                 putExtra("type", "class")
@@ -136,6 +149,11 @@ class MainActivity2 : AppCompatActivity() {
                         }
                         llHome.addView(button_dynamic)
                     }
+
+                    // Had to remove and add view to dynamically add class photoboard buttons inbetween titles
+                    llHome.removeView(messageTitle)
+                    llHome.addView(messageTitle)
+
                     for (item in activeUserSname) {
                         Log.v("EXAMPLE", activeUserSname.toString())
 
@@ -145,9 +163,21 @@ class MainActivity2 : AppCompatActivity() {
                             LinearLayout.LayoutParams.MATCH_PARENT,
                             ViewGroup.LayoutParams.WRAP_CONTENT
                         )
+
+                        /**
+                         *  Each student button aesthetics
+                         */
+                        button_dynamic.setTextColor(getResources().getColor(R.color.primary_text_color))
+                        button_dynamic.setBackgroundResource(R.drawable.round_button)
+                        val param = button_dynamic.layoutParams as ViewGroup.MarginLayoutParams
+                        param.setMargins(5,20,5,0)
+
                         var index = activeUserSname.indexOf(item)
                         button_dynamic.text = item
                         button_dynamic.setOnClickListener {
+                            // On click aesthetic
+                            button_dynamic.setBackgroundResource(R.drawable.round_button_clicked)
+
                             val Intent = Intent(this, messages::class.java).apply {
                                 putExtra("recipient", item)
                                 putExtra("type", "direct_t")

@@ -4,11 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_color"
     tools:context=".accountManagementActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/secondary_color"
         android:theme="@style/Theme.UDPS.AppBarOverlay">
 
         <TextView
@@ -18,13 +20,18 @@
             android:gravity="center"
             android:minHeight="?actionBarSize"
             android:padding="@dimen/appbar_padding"
-            android:text="AccountManagement"
+            android:text="Account Management"
             android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:background="@color/background_color"
+            app:tabIconTint="@color/secondary_color"
+            app:tabIndicatorColor="@color/secondary_color"
+            app:tabSelectedTextColor="@color/secondary_color"
+            app:tabTextColor="@color/primary_text_color" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager.widget.ViewPager

@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.udps.databinding.FragmentEditAccountBinding
 
@@ -61,8 +62,10 @@ class editAccountFragment : Fragment() {
             val containerLabel = LinearLayout(activity)
             val containerButtons = LinearLayout(activity)
             val label = TextView(activity)
+            label.setTextColor(resources.getColor(R.color.white))
             val editButton = Button(activity)
             val deleteButton = Button(activity)
+
             containerButtons.gravity = Gravity.RIGHT
             val lp = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT)
             lp.weight = 55f
