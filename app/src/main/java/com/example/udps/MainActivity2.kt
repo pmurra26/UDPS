@@ -144,6 +144,7 @@ class MainActivity2 : AppCompatActivity() {
                                 putExtra("recipient", classNames[i])
                                 putExtra("type", "class")
                                 putExtra("account", account)
+                                putExtra("accountType", "teacher")
                             }
                             startActivity(Intent)
                         }

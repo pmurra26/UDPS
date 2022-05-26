@@ -139,6 +139,7 @@ class MainActivity : AppCompatActivity() {
                 putExtra("username", shortName.toString())
                 putExtra("account", accountType.toString())
                 putExtra("recipient", room)
+                putExtra("accountType", "parent")
             }
 
             Toast.makeText(this@MainActivity, "Welcome $shortName!", Toast.LENGTH_SHORT)

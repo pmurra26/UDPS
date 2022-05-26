@@ -22,6 +22,7 @@ class photoboardActivity : AppCompatActivity() {
     private lateinit var realm: Realm
     private var user: User? = null
     private lateinit var accountT:String
+    lateinit var accountType:String
     private lateinit var adapterL: PhotoboardRecyclerAdapterLeftie
     private lateinit var adapterR: PhotoboardRecyclerAdapterRightie
     private lateinit var recyclerViewL: RecyclerView
@@ -35,7 +36,7 @@ class photoboardActivity : AppCompatActivity() {
     }
     override fun onBackPressed() {
         // Disable going back to the MainActivity
-        if (accountT == "parent"){moveTaskToBack(true)}
+        if (accountType == "parent"){moveTaskToBack(true)}
         else super.onBackPressed()
     }
 
@@ -44,7 +45,7 @@ class photoboardActivity : AppCompatActivity() {
         val txtHeader = findViewById<TextView>(R.id.PBtextHeader)
         val recipient:String = intent.getStringExtra("recipient").toString()
         val accountT = intent.getStringExtra("account")
-        val account = intent.getStringExtra("username")
+        accountType = intent.getStringExtra("accountType").toString()
         val actionButton = findViewById<Button>(R.id.head_actionButton)
         val headImg = findViewById<TextView>(R.id.head_image)
 
