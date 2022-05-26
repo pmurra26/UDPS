@@ -117,7 +117,11 @@ class messages : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_messages)
         println(savedInstanceState==null)
-        val pickPicture = findViewById<Button>(R.id.buttonPictureSelect)
+
+        /**
+         *  Changed buttonPictureSelect to imagebuttonPictureSelect to display gallery icon
+         */
+        val pickPicture = findViewById<ImageButton>(R.id.imagebuttonPictureSelect)
         pickPicture.setOnClickListener {
             loadImg.launch("image/*")
             Log.e("pick button", "pickbuton pressed")
@@ -193,8 +197,12 @@ class messages : AppCompatActivity() {
             }
             inputTA.text.clear()
         }
-        val imgCapture = findViewById<Button>(R.id.buttonPicture)
-        imgCapture.text = String(Character.toChars(0x1F4F7))
+
+        /**
+         *  Changed buttonPicture to imagebuttonPicture to display camera icon
+         */
+        val imgCapture = findViewById<ImageButton>(R.id.imagebuttonPicture)
+        //imgCapture.text = String(Character.toChars(0x1F4F7))
         imgCapture.setOnClickListener{
             val Intent = Intent(this, cameraActivity::class.java).apply {
                 putExtra("source", "messages")
@@ -203,8 +211,12 @@ class messages : AppCompatActivity() {
             }
             startActivity(Intent)
         }
-        val pickPicture = findViewById<Button>(R.id.buttonPictureSelect)
-        pickPicture.text = String(Character.toChars(0x1F5BC))
+
+        /**
+         *  Changed buttonPictureSelect to imagebuttonPictureSelect to display gallery icon
+         */
+        val pickPicture = findViewById<ImageButton>(R.id.imagebuttonPictureSelect)
+        //pickPicture.text = String(Character.toChars(0x1F5BC))
         pickPicture.setOnClickListener {
             loadImg.launch("image/*")
             Log.e("pick button", "pickbuton pressed")

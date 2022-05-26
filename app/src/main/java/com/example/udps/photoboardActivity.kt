@@ -144,7 +144,7 @@ class photoboardActivity : AppCompatActivity() {
         })
 
         if(accountT=="parent"){
-            actionButton.text = String(Character.toChars(0x1F4E7))
+            actionButton.text = "Messages"//String(Character.toChars(0x1F4E7))
             actionButton.setOnClickListener {
                 val intent = Intent(this, messages::class.java).apply {
                     putExtra("recipient", "teachers")

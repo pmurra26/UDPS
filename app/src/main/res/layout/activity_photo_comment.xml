@@ -11,6 +11,7 @@
         android:id="@+id/photoCommentSname"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textColor="@color/primary_text_color"
         app:layout_constraintBottom_toTopOf="@id/photoCommentTitle"
         app:layout_constraintEnd_toStartOf="@+id/photoCommentDate"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,6 +21,7 @@
         android:id="@+id/photoCommentDate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textColor="@color/primary_text_color"
         app:layout_constraintBottom_toTopOf="@id/photoCommentTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/photoCommentSname"
@@ -29,6 +31,7 @@
         android:id="@+id/photoCommentTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/primary_text_color"
         app:layout_constraintBottom_toTopOf="@id/photoCommentImg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -64,10 +67,29 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
+        <ImageButton
+            android:id="@+id/imagebuttonCamera"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#00FFFFFF"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_camera" />
+
+        <ImageButton
+            android:id="@+id/imagebuttonGallery"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#00FFFFFF"
+            app:layout_constraintStart_toEndOf="@id/imagebuttonCamera"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_gallery" />
+
         <Button
             android:id="@+id/buttonCamera"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -76,6 +98,7 @@
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:text=""
+            android:visibility="invisible"
             app:layout_constraintStart_toEndOf="@id/buttonCamera"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -83,16 +106,20 @@
             android:id="@+id/TAcommentInput"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="type your message here"
+            android:backgroundTint="@color/secondary_color"
+            android:hint="Message..."
+            android:textColor="@color/primary_text_color"
+            android:textColorHint="#DCDCDC"
             app:layout_constraintEnd_toStartOf="@id/buttonSend"
-            app:layout_constraintStart_toEndOf="@+id/buttonGallery"
+            app:layout_constraintStart_toEndOf="@id/imagebuttonGallery"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/buttonSend"
-            android:layout_width="40dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=">"
+            android:backgroundTint="@color/secondary_color"
+            android:text="Send"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

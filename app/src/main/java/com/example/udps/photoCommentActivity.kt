@@ -12,10 +12,7 @@ import android.os.Looper
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -166,9 +163,11 @@ class photoCommentActivity : AppCompatActivity() {
             inputTA.text.clear()
         }
 
-
-        val imgCapture = findViewById<Button>(R.id.buttonCamera)
-        imgCapture.text = String(Character.toChars(0x1F4F7))
+        /**
+         * Changed buttonCamera to imagebuttonCamera to display camera icon
+         */
+        val imgCapture = findViewById<ImageButton>(R.id.imagebuttonCamera)
+        //imgCapture.text = String(Character.toChars(0x1F4F7))
         imgCapture.setOnClickListener {
             val Intent = Intent(this, cameraActivity::class.java).apply {
                 putExtra("source", "comment")
@@ -178,8 +177,11 @@ class photoCommentActivity : AppCompatActivity() {
             startActivity(Intent)
         }
 
-        val pickPicture = findViewById<Button>(R.id.buttonGallery)
-        pickPicture.text = String(Character.toChars(0x1F5BC))
+        /**
+         * Changed buttonGallery to imagebuttonGaller to display gallery icon
+         */
+        val pickPicture = findViewById<ImageButton>(R.id.imagebuttonGallery)
+        //pickPicture.text = String(Character.toChars(0x1F5BC))
         pickPicture.setOnClickListener {
             loadImg.launch("image/*")
             Log.e("pick button", "pickbuton pressed")

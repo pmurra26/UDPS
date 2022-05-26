@@ -10,7 +10,8 @@
     <color name="primary_text_color">#FFFFFFFF</color>
     <color name="secondary_color">#00963D</color>
     <color name="background_color">#121212</color>
-    <color name="sent_message">#00963D</color>
-    <color name="received_message">#42b4ff</color>
+    <color name="sent_message">#cc6bddff</color>
+    <color name="received_message">#9900ff66</color>
+    <color name="comment_card">#996bddff</color>
 
 </resources>
