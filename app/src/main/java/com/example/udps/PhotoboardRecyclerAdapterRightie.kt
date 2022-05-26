@@ -60,11 +60,14 @@ internal class PhotoboardRecyclerAdapterRightie(data: OrderedRealmCollection<pho
                 }
                 //DownloadImageFromInternet(holder.messageImg).execute(obj?.image)
                 holder.postImg.setOnClickListener() {
-                    val openURL = Intent(Intent.ACTION_VIEW)
-                    openURL.data = Uri.parse(imageURL)
-                    holder.postImg.context.startActivity(openURL)
-
-
+                    val intent =
+                        Intent(holder.postImg.context, photoCommentActivity::class.java).apply {
+                            putExtra("shortName", senderSname)
+                            putExtra("time", time)
+                            putExtra("title", title)
+                            putExtra("image", imageURL)
+                        }
+                    holder.postImg.context.startActivity(intent)
                 }
             }
         } else holder.container.visibility = View.GONE
