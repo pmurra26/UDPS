@@ -12,6 +12,7 @@ import android.view.*
 import android.widget.*
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat.startActivity
+import androidx.core.view.marginBottom
 import androidx.recyclerview.widget.RecyclerView
 import io.realm.OrderedRealmCollection
 import io.realm.RealmRecyclerViewAdapter
@@ -66,7 +67,11 @@ internal class PhotoboardRecyclerAdapterLeftie(data: OrderedRealmCollection<phot
                 holder.postImg.context.startActivity(intent)
             }
         }
-        else holder.container.visibility=View.GONE
+        else{
+            val param = holder.container.layoutParams as ViewGroup.MarginLayoutParams
+            param.setMargins(0,0,0,0)
+            holder.container.layoutParams = param
+            holder.container.visibility=View.GONE}
 
 
 
